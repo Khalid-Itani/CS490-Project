@@ -7,10 +7,10 @@ import { PrismaService } from '../prisma/prisma.service';
 export class AuthService {
   constructor(private jwtService: JwtService, private prisma: PrismaService) {}
 
-  async register(email: string, password: string) {
+  async register(name: string, email: string, password: string) {
     const hash = await bcrypt.hash(password, 10);
-    const user = await this.prisma.user.create({ data: { email, password: hash } });
-    return this.generateToken(user.id, user.email);
+    const user = await this.prisma.user.create({ data: { name, email, password: hash } });
+    return this.generateToken(user.id.toString(), user.email);
   }
 
   async login(email: string, password: string) {
@@ -18,7 +18,7 @@ export class AuthService {
     if (!user) throw new Error('Invalid credentials');
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) throw new Error('Invalid credentials');
-    return this.generateToken(user.id, user.email);
+    return this.generateToken(user.id.toString(), user.email);
   }
 
   generateToken(userId: string, email: string) {
