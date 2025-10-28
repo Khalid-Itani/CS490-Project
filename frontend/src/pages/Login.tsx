@@ -1,7 +1,7 @@
 import { useState } from "react";
-import AuthCard from "../components/AuthCard";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import AuthCard from "../components/AuthCard";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,28 +21,44 @@ export default function Login() {
   };
 
   return (
-    <AuthCard title="Welcome Back">
-      <form onSubmit={submit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          required
-        />
+    <div className="auth-page">
+      <header className="lp-header container">
+        <div className="lp-brand">
+          <img src="/propel-logo.png" alt="Propel Logo" className="lp-logo" />
+          <span className="lp-wordmark">Propel</span>
+        </div>
 
-        {error && <p className="error">{error}</p>}
+        <nav className="lp-nav">
+          <Link to="/login" className="lp-link">Login</Link>
+          <Link to="/register" className="btn btn--primary">Get Started</Link>
+        </nav>
+      </header>
 
-        <button type="submit">Sign In</button>
-        <p><Link to="/register">Create account →</Link></p>
-      </form>
-    </AuthCard>
+      <AuthCard title="Welcome Back">
+        <form onSubmit={submit}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+          />
+
+          {error && <p className="error">{error}</p>}
+
+          <button type="submit">Sign In</button>
+          <p>
+            <Link to="/register">Create an account →</Link>
+          </p>
+        </form>
+      </AuthCard>
+    </div>
   );
 }
