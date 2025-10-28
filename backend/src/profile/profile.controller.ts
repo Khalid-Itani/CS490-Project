@@ -7,7 +7,7 @@ export class ProfileController {
 
   @Get('overview')
   async getProfileOverview(@Req() req) {
-    const userId = req.user.id;  // get logged-in user ID
+    const userId = "mock-user-id";
     return this.profileService.getProfileOverview(userId);
   }
 }
