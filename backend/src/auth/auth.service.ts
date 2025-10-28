@@ -7,9 +7,9 @@ import { PrismaService } from '../prisma/prisma.service';
 export class AuthService {
   constructor(private jwtService: JwtService, private prisma: PrismaService) {}
 
-  async register(name: string, email: string, password: string) {
+  async register(firstname: string, lastname: string, email: string, password: string) {
     const hash = await bcrypt.hash(password, 10);
-    const user = await this.prisma.user.create({ data: { name, email, password: hash } });
+    const user = await this.prisma.user.create({ data: { firstname, lastname, email, password: hash } });
     return this.generateToken(user.id.toString(), user.email);
   }
 

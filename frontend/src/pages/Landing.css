@@ -1,0 +1,28 @@
+.landing {
+  padding: 2rem;
+  text-align: center;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+
+nav a {
+  margin-left: 1.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  color: var(--primary);
+}
+
+.primary-btn,
+.cta-btn {
+  background: var(--primary);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 1rem;
+  display: inline-block;
+}

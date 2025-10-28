@@ -1,0 +1,16 @@
+:root {
+  --primary: #0D1F2D; /* Navy from UC-014 */
+  --accent: #5C7A89; /* Light blue/gray */
+  --background: #FFFFFF;
+  --text-primary: #0D1F2D;
+  --text-secondary: #4A4A4A;
+  --border: #E0E0E0;
+  --error: #D32F2F;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--background);
+  color: var(--text-primary);
+}
