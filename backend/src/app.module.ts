@@ -1,15 +1,31 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
 import { AuthModule } from './auth/auth.module';
 import { ApplicationsModule } from './applications/applications.module';
 import { EducationModule } from './education/education.module';
 import { CertificationModule } from './certification/certification.module';
 import { ProjectsModule } from './projects/projects.module';
-import { PrismaService } from './prisma/prisma.service';  
+
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
-  imports: [AuthModule, ApplicationsModule, EducationModule, CertificationModule, ProjectsModule],
+  imports: [
+    // Load .env and expose ConfigService app-wide
+    ConfigModule.forRoot({ isGlobal: true }),
+
+    // Feature modules
+    AuthModule,
+    ApplicationsModule,
+    EducationModule,
+    CertificationModule,
+    ProjectsModule,
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
   exports: [AppService, PrismaService],
