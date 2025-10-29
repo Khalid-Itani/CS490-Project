@@ -1,0 +1,182 @@
+/* =========================================
+   ATS Color System (Light + Dark)
+   ========================================= */
+
+/* ---------- Light theme (default) ---------- */
+:root {
+  /* Primary Palette */
+  --primary-color:   #1e88e5; /* Blue 600 */
+  --secondary-color: #1565c0; /* Blue 800 */
+  --accent-color:    #42a5f5; /* Blue 400 */
+
+  /* Semantic */
+  --success-color: #4caf50;   /* Green 500 */
+  --warning-color: #ffb300;   /* Amber 600 */
+  --error-color:   #e53935;   /* Red 600 */
+  --info-color:    #29b6f6;   /* Light Blue 400 */
+
+  /* Neutral */
+  --text-color:        #212121; /* Gray 900 */
+  --muted-text-color:  #5f6368; /* Gray 600 */
+  --background-color:  #fafafa; /* Gray 50 */
+  --panel-bg:          #ffffff; /* Cards/sections */
+  --border-color:      #e5e7eb; /* Hairline borders */
+}
+
+/* ---------- Dark theme (opt-in) ---------- */
+:root[data-theme="dark"] {
+  --background-color: #0f172a; /* Slate 900 */
+  --panel-bg:         #111827; /* Gray 900 */
+  --text-color:       #e5e7eb; /* Gray 200 */
+  --muted-text-color: #94a3b8; /* Slate 400 */
+  --border-color:     #1f2937; /* Gray 800 */
+
+  --primary-color:   #60a5fa;  /* Blue 400 */
+  --secondary-color: #3b82f6;  /* Blue 500 */
+  --accent-color:    #93c5fd;  /* Blue 300 */
+
+  --success-color: #22c55e;    /* Green 500 */
+  --warning-color: #f59e0b;    /* Amber 500 */
+  --error-color:   #ef4444;    /* Red 500 */
+  --info-color:    #38bdf8;    /* Sky 400 */
+}
+
+/* ---------- Layout ---------- */
+html, body, #root {
+  height: 100%;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.container {
+  max-width: 1100px;
+  margin-inline: auto;       /* centers page content */
+  padding: 24px 20px;
+}
+
+/* Center hero section */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* Centers horizontally */
+  justify-content: center; /* Centers vertically within its space */
+  text-align: center;
+  gap: 10px;
+  margin-top: 60px;
+  margin-bottom: 25px;
+}
+
+/* Subtitle */
+.subtitle {
+  text-align: center;
+  margin-top: 6px;
+  opacity: 0.9;
+}
+
+/* Buttons + link section */
+.cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  margin-bottom: 24px;
+}
+
+
+
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.card {
+  background: var(--panel, rgba(255,255,255,0.04));
+  border: 1px solid var(--border, rgba(255,255,255,0.08));
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+}
+
+/* Headings */
+h1 { font-size: clamp(22px, 3.2vw, 28px); margin: 4px 0; }
+h2 { font-size: clamp(18px, 2.6vw, 22px); margin: 24px 0 8px; }
+
+/* Buttons */
+.btn {
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--text-color);
+  border-color: var(--border, rgba(0,0,0,0.12));
+}
+
+.btn:hover { filter: brightness(1.05); }
+.btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Links */
+a.link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Surface fallbacks if CSS vars above not found */
+:root {
+  --panel: #ffffff;
+  --border: #e6e6e6;
+}
+:root[data-theme="dark"] {
+  --panel: #101826;
+  --border: #1f2434;
+}
+
+/* ---- Centered hero block ---- */
+.hero {
+  max-width: 780px;          /* keeps lines readable */
+  margin: 56px auto 28px;    /* centers horizontally */
+  text-align: center;
+}
+
+.hero h1 {
+  margin: 0;
+  color: var(--primary-color);
+}
+
+.hero-cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 10px;
+}
+
+.theme-toggle {
+  margin-top: 6px;
+}
+
+/* Ensure page padding + centering */
+.container {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: 24px 20px;
+}
