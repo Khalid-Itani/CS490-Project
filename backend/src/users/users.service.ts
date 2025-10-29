@@ -7,7 +7,6 @@ import { RequestAccountDeletionDto } from './dto/request-account-deletion.dto';
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  // Overloads: support both register(dto) and register(email, password)
   async register(dto: { email: string; password: string }): Promise<{ ok: true; user: any } | { ok: false; message: string }>;
   async register(email: string, password: string): Promise<any>;
   async register(arg1: any, arg2?: any): Promise<any> {

@@ -3,24 +3,37 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ApplicationsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
+  // ✅ Fetch all job applications for a user
   findAll(userId: string) {
-    return this.prisma.jobApplication.findMany({ where: { userId: Number(userId) } });
+    return this.prisma.jobApplication.findMany({
+      where: { userId }, // no Number()
+    });
   }
 
-  create(userId: string, data: any) {
-    return this.prisma.jobApplication.create({ data: { ...data, userId: Number(userId) } });
+  // ✅ Create a new application for a user
+  async create(userId: string, data: any) {
+    return this.prisma.jobApplication.create({
+      data: {
+        ...data,
+        userId, // no Number()
+      },
+    });
   }
 
-  update(userId: string, id: string, data: any) {
+  // ✅ Update a specific job application for a user
+  async update(userId: string, id: string, data: any) {
     return this.prisma.jobApplication.updateMany({
-      where: { id: Number(id), userId: Number(userId)  },
+      where: { id, userId }, // both strings
       data,
     });
   }
 
-  remove(userId: string, id: string) {
-    return this.prisma.jobApplication.deleteMany({ where: { id: Number(id), userId: Number(userId) } });
+  // ✅ Delete a job application for a user
+  async remove(userId: string, id: string) {
+    return this.prisma.jobApplication.deleteMany({
+      where: { id, userId }, // both strings
+    });
   }
 }
