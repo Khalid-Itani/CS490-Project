@@ -1,0 +1,332 @@
+.profile-container {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-form input,
+.profile-form select,
+.profile-form textarea {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.profile-form textarea {
+  min-height: 80px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.save-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  font-size: 0.85em;
+  margin-bottom: 8px;
+}
+
+.success {
+  color: green;
+  margin-top: 15px;
+}
+
+.char-count {
+  font-size: 0.85em;
+  color: #555;
+  text-align: right;
+}
+
+.profile-picture-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.profile-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+  margin-bottom: 0.8rem;
+}
+
+.upload-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.upload-label {
+  background-color: #007bff;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-label:hover {
+  background-color: #0056b3;
+}
+
+button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5a6268;
+}
+
+.progress-bar {
+  width: 100%;
+  background: #eee;
+  height: 8px;
+  border-radius: 4px;
+  margin-top: 0.8rem;
+}
+
+.progress {
+  height: 8px;
+  background: #28a745;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.employment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.employment-form input,
+.employment-form textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.date-row {
+  display: flex;
+  gap: 15px;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.save-btn {
+  background-color: #4f46e5;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  background-color: #4338ca;
+}
+
+.cancel-btn {
+  background-color: #6b7280;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background-color: #4b5563;
+}
+
+.success {
+  color: green;
+  font-weight: 600;
+}
+
+.error {
+  color: red;
+  font-weight: 600;
+}
+
+.back-btn {
+  background-color: #9ca3af;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.back-btn:hover {
+  background-color: #6b7280;
+}
+
+.current-position {
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.current-position input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.current-position label {
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.employment-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.employment-entry {
+  border-left: 4px solid #ccc;
+  padding-left: 15px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.employment-entry::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #999;
+}
+
+.current-role {
+  border-left-color: #007bff;
+}
+
+.current-role::before {
+  background-color: #007bff;
+}
+
+.employment-header h4 {
+  margin: 0;
+}
+
+.company {
+  font-weight: bold;
+  color: #333;
+}
+
+.dates {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.location {
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.description {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.edit-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.summary-avatar {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 15px 0;
+  border: 3px solid #ddd;
+}
+
+
+
