@@ -17,7 +17,6 @@ import TypographyPreview from './pages/TypographyPreview';
 
 // Global styles
 import './styles/theme.css';
-import './CS490/UC-014/styles/colors.css';
 
 const router = createBrowserRouter([
   {
