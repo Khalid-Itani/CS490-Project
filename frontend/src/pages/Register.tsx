@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { api } from "../lib/api"; // <-- use our axios instance
 import AuthCard from "../components/AuthCard";
 
 export default function Register() {
@@ -10,24 +10,45 @@ export default function Register() {
     lastName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSubmitting(true);
 
     try {
-      // backend expects `firstname` and `lastname` (lowercase). Map fields accordingly.
-      await axios.post("/auth/register", {
+      // basic client check to match backend rule
+      if (form.password !== form.confirmPassword) {
+        setError("Passwords do not match");
+        return;
+      }
+
+      await api.post("/auth/register", {
         firstname: form.firstName,
         lastname: form.lastName,
         email: form.email,
         password: form.password,
+        confirmPassword: form.confirmPassword,
       });
+
       navigate("/dashboard");
-    } catch {
-      setError("Email already in use");
+    } catch (err: any) {
+      const status = err?.response?.status;
+      const msg = err?.response?.data?.message;
+
+      if (status === 409) setError("Email already in use");
+      else if (status === 400) {
+        // backend validation errors can be an array or a string
+        setError(Array.isArray(msg) ? msg[0] : msg || "Invalid input");
+      } else {
+        setError(msg || "Something went wrong");
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -51,12 +72,14 @@ export default function Register() {
             placeholder="First Name"
             value={form.firstName}
             onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+            name="firstName"
             required
           />
           <input
             placeholder="Last Name"
             value={form.lastName}
             onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+            name="lastName"
             required
           />
           <input
@@ -64,6 +87,7 @@ export default function Register() {
             placeholder="Email"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
+            name="email"
             required
           />
           <input
@@ -71,12 +95,23 @@ export default function Register() {
             placeholder="Password"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
+            name="password"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={form.confirmPassword}
+            onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })}
+            name="confirmPassword"
             required
           />
 
           {error && <p className="error">{error}</p>}
 
-          <button type="submit">Register</button>
+          <button type="submit" disabled={submitting}>
+            {submitting ? "Creating..." : "Register"}
+          </button>
           <p>
             <Link to="/login">Already have an account? Login →</Link>
           </p>

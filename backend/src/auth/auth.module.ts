@@ -8,16 +8,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     PrismaModule,
-    ConfigModule.forRoot({
-      isGlobal: true, // Makes env variables available app-wide
-    }),
+    ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET'),
-        signOptions: {
-          expiresIn: 60 * 60 * 24 * 7, // ✅ 7 days in seconds
-        },
+      useFactory: (cfg: ConfigService) => ({
+        secret: cfg.get<string>('JWT_SECRET'),
+        expiresIn: '7d',
+        signOptions: { expiresIn: 60 * 60 * 24 * 7 },
       }),
       inject: [ConfigService],
     }),
