@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "../components/ui/Icon";
 
 // Helper for className merging
@@ -224,6 +224,23 @@ function Navbar() {
 
 // ---- The layout wrapper that includes Navbar + Breadcrumbs ----
 export default function AppLayout() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Catch token from OAuth callback redirect ?token=... and store.
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('token');
+    if (token) {
+      try {
+        localStorage.setItem('token', token);
+      } catch {}
+      // Clean the URL by removing the token param
+      const path = location.pathname + (Array.from(params.keys()).filter(k => k !== 'token').length ? '?' + Array.from(params.entries()).filter(([k]) => k !== 'token').map(([k,v]) => `${k}=${encodeURIComponent(v)}`).join('&') : '');
+      navigate(path || '/dashboard', { replace: true });
+    }
+  }, [location.search]);
+
   return (
     <div className="min-h-screen w-full bg-gray-50">
 

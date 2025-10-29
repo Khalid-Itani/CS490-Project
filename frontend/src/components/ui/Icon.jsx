@@ -77,20 +77,24 @@ export const Icon = ({
   size = 'md',
   variant = 'default',
   className = '',
-  spin = false
+  spin = false,
+  label,
+  title
 }) => {
   const IconComponent = iconMap[name];
-  
   if (!IconComponent) {
     console.warn(`Icon "${name}" not found in icon map`);
     return null;
   }
-
   const sizeClass = sizeMap[size] || sizeMap.md;
   const variantClass = variantMap[variant] || variantMap.default;
-  
   return (
-    <span className={`inline-flex items-center justify-center ${sizeClass} ${variantClass} ${spin ? 'animate-spin' : ''} ${className}`}>
+    <span
+      className={`inline-flex items-center justify-center ${sizeClass} ${variantClass} ${spin ? 'animate-spin' : ''} ${className}`}
+      role="img"
+      aria-label={label || name}
+      title={title || label || name}
+    >
       <IconComponent className="w-full h-full" />
     </span>
   );

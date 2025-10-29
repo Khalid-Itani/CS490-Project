@@ -1,4 +1,7 @@
 -- CreateEnum
+CREATE TYPE "ApplicationStatus" AS ENUM ('APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED');
+
+-- CreateEnum
 CREATE TYPE "VerificationStatus" AS ENUM ('PENDING', 'VERIFIED', 'REJECTED');
 
 -- CreateEnum
@@ -8,9 +11,35 @@ CREATE TYPE "ProjectStatus" AS ENUM ('COMPLETED', 'ONGOING', 'PLANNED');
 CREATE TYPE "MediaType" AS ENUM ('IMAGE', 'VIDEO', 'OTHER');
 
 -- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "email" VARCHAR(255) NOT NULL,
+    "password" TEXT NOT NULL,
+    "firstname" TEXT NOT NULL,
+    "lastname" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "JobApplication" (
+    "id" SERIAL NOT NULL,
+    "companyName" TEXT NOT NULL,
+    "positionTitle" TEXT NOT NULL,
+    "status" "ApplicationStatus" NOT NULL DEFAULT 'APPLIED',
+    "appliedDate" TIMESTAMP(3),
+    "notes" TEXT,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "JobApplication_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Education" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "degree" TEXT NOT NULL,
     "institution" TEXT NOT NULL,
     "fieldOfStudy" TEXT,
@@ -30,7 +59,7 @@ CREATE TABLE "Education" (
 -- CreateTable
 CREATE TABLE "Certification" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "issuingOrganization" TEXT NOT NULL,
     "dateEarned" TIMESTAMP(3) NOT NULL,
@@ -50,7 +79,7 @@ CREATE TABLE "Certification" (
 -- CreateTable
 CREATE TABLE "Project" (
     "id" SERIAL NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "userId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "description" TEXT,
     "role" TEXT,
@@ -78,6 +107,12 @@ CREATE TABLE "ProjectMedia" (
 
     CONSTRAINT "ProjectMedia_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- AddForeignKey
+ALTER TABLE "JobApplication" ADD CONSTRAINT "JobApplication_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Education" ADD CONSTRAINT "Education_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -67,15 +67,22 @@ const ProfileSummary = () => {
         
       )}
       <button
-  className="back-btn"
-  onClick={() => {
-    localStorage.removeItem("profileData");
-    localStorage.removeItem("employmentHistory");
-    window.location.href = "/";
-  }}
->
-  Back to Edit Profile
-</button>
+        className="back-btn"
+        onClick={() => {
+          localStorage.removeItem("profileData");
+          localStorage.removeItem("employmentHistory");
+          window.location.href = "/profile/edit";
+        }}
+      >
+        Back to Edit Profile
+      </button>
+      <button
+        className="btn btn--danger"
+        style={{ marginLeft: 12, marginTop: 12 }}
+        onClick={() => window.location.href = "/delete-account"}
+      >
+        Delete Account
+      </button>
 
     </div>
   );
