@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import AppLayout from './layouts/AppLayout';
 
 // Pages
+import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Jobs from './pages/Jobs';
 import JobDetails from './pages/JobDetails';
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
   {
     element: <AppLayout />, // navbar + breadcrumbs on every child route
     children: [
-      { path: '/', element: <Dashboard /> },
+      { path: '/', element: <Landing /> },
       { path: '/dashboard', element: <Dashboard /> },
       { path: '/jobs', element: <Jobs /> },
       { path: '/jobs/:jobId', element: <JobDetails /> },
