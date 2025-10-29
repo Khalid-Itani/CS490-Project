@@ -1,11 +1,12 @@
 :root {
+  /* Base (light) theme by default so text is dark on light backgrounds */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #213547; /* darker body text */
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,6 +14,59 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Tailwind entry points */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base layer: set consistent typography using Tailwind tokens/utilities */
+@layer base {
+  /* Base page sizing */
+  html { font-size: 16px; }
+
+  /* Body: primary font, body size & color */
+  body {
+    @apply font-sans text-body text-gray-800 bg-white;
+    margin: 0;
+    display: block; /* keep layout defaults; AppLayout controls page layout */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-width: 320px;
+    min-height: 100vh;
+  }
+
+  /* Headings: use secondary heading font and stronger weight */
+  h1 { @apply font-heading text-h1 font-semibold text-gray-900; margin: 0 0 0.5rem; }
+  h2 { @apply font-heading text-h2 font-semibold text-gray-900; margin: 0 0 0.5rem; }
+  h3 { @apply font-heading text-h3 font-semibold text-gray-900; margin: 0 0 0.4rem; }
+  h4 { @apply font-heading text-h4 font-medium text-gray-900; margin: 0 0 0.4rem; }
+  h5 { @apply font-heading text-h5 font-medium text-gray-900; margin: 0 0 0.3rem; }
+  h6 { @apply font-heading text-h6 font-medium text-gray-900; margin: 0 0 0.3rem; }
+
+  /* Paragraphs and lists */
+  p, ul, ol, dl {
+    @apply text-body mb-4;
+  }
+
+  /* Captions / small text */
+  small, .caption {
+    @apply text-caption text-gray-600;
+  }
+
+  /* Links and interactive text */
+  a {
+    @apply text-indigo-600 font-medium;
+    text-decoration: none;
+  }
+  a:hover { @apply text-indigo-700 underline; }
+
+  /* Buttons: keep some default visual style */
+  button {
+    @apply rounded-md px-3 py-2;
+  }
+}
+
+/* Fallbacks / non-Tailwind rules preserved below (if you prefer) */
 a {
   font-weight: 500;
   color: #646cff;
@@ -22,19 +76,18 @@ a:hover {
   color: #535bf2;
 }
 
+/* Keep page layout defaults that your app expects */
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
+  /* remove the old `display:flex`/centering so pages flow normally;
+     AppLayout already handles page wrapper positioning */
+  display: block;
   min-width: 320px;
   min-height: 100vh;
+  /* prevent accidental horizontal scrolling on small screens */
+  overflow-x: hidden;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* Keep any extra component-specific rules */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -45,6 +98,8 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  /* ensure touch targets meet recommended minimum */
+  min-height: 40px;
 }
 button:hover {
   border-color: #646cff;
@@ -54,15 +109,89 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
+  /* switch to dark theme when user prefers dark */
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
   }
-  a:hover {
-    color: #747bff;
+  a:hover { color: #535bf2; }
+  button { background-color: #1a1a1a; }
+}
+
+@layer components {
+  /* Button base */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md font-medium transition;
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500;
   }
-  button {
-    background-color: #f9f9f9;
+
+  /* Variants */
+  .btn-primary {
+    @apply bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800;
   }
+  .btn-primary:disabled,
+  .btn-primary[disabled] {
+    @apply bg-indigo-300 text-white cursor-not-allowed opacity-60;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-gray-800 border border-gray-300 hover:bg-gray-50 active:bg-gray-100;
+  }
+  .btn-secondary:disabled,
+  .btn-secondary[disabled] {
+    @apply bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-60;
+  }
+
+  .btn-tertiary {
+    @apply bg-transparent text-indigo-600 hover:text-indigo-700;
+  }
+  .btn-tertiary:disabled,
+  .btn-tertiary[disabled] {
+    @apply text-gray-400 cursor-not-allowed opacity-60;
+  }
+
+  /* Sizes */
+  .btn-sm { @apply text-sm px-2.5 py-1.5; }
+  .btn-md { @apply text-base px-3 py-2; }
+  .btn-lg { @apply text-lg px-4 py-2.5; }
+
+  /* Loading - use attribute data-loading=\"true\" or class `.is-loading` */
+  .btn[data-loading="true"] {
+    @apply cursor-wait opacity-90;
+  }
+  .btn[data-loading="true"] > .btn-spinner { @apply animate-spin h-4 w-4; }
+
+  /* Input fields */
+  .input {
+    @apply block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-body text-gray-900;
+    @apply placeholder-gray-400;
+    transition: box-shadow .12s, border-color .12s;
+  }
+  .input:focus {
+    @apply outline-none ring-2 ring-indigo-400 border-indigo-500;
+  }
+
+  /* Error state */
+  .input-error {
+    @apply border-red-500 ring-2 ring-red-200;
+  }
+  .form-error {
+    @apply text-sm text-red-600 mt-1;
+  }
+
+  /* Labels and help */
+  .form-label { @apply block text-sm font-medium text-gray-700 mb-1; }
+  .form-help { @apply text-sm text-gray-500 mt-1; }
+
+}
+@layer utilities {
+  /* Minimum tap target size (WCAG-aligned) */
+  .touch-target { min-height: 44px; min-width: 44px; }
+
+  /* Safe responsive media */
+  .prose-img { max-width: 100%; height: auto; }
+
+  /* Prevent layout jank on tiny screens */
+  .no-h-scroll { overflow-x: hidden; }
 }
