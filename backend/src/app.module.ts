@@ -24,7 +24,7 @@ import { PrismaService } from './prisma/prisma.service';
     EducationModule,
     CertificationModule,
     ProjectsModule,
-    UsersModule,
+    //UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

@@ -8,29 +8,50 @@ datasource db {
 }
 
 model User {
-  id              Int              @id @default(autoincrement())
-  email           String           @unique
-  password        String
-  firstname       String
-  lastname        String
-  createdAt       DateTime         @default(now())
-  jobApplications JobApplication[]
+  id                  String           @id @default(uuid())
+  email               String           @unique
+  password            String
+  firstname           String?
+  lastname            String?
+  isPendingDeletion   Boolean          @default(false)
+  deletionRequestedAt DateTime?
+  deletionGraceUntil  DateTime?
+  deletionReason      String?
+  deletionCancelToken String?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
 
-  // relations added for profile models
-  educations     Education[]
-  certifications Certification[]
-  projects       Project[]
+  // 1:1 relation with Profile
+  profile             Profile?
+
+  // 1:N relations
+  jobApplications     JobApplication[]
+  educations          Education[]
+  certifications      Certification[]
+  projects            Project[]
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName String?
+  bio         String?
+  location    String?
+  avatarUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model JobApplication {
-  id            Int               @id @default(autoincrement())
+  id            String            @id @default(uuid())
   companyName   String
   positionTitle String
   status        ApplicationStatus @default(APPLIED)
   appliedDate   DateTime?
   notes         String?
-  userId        Int
-  user          User              @relation(fields: [userId], references: [id])
+  userId        String
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum ApplicationStatus {
@@ -40,11 +61,10 @@ enum ApplicationStatus {
   REJECTED
 }
 
-// Education entries for user profiles
 model Education {
-  id           Int       @id @default(autoincrement())
-  userId       Int
-  user         User      @relation(fields: [userId], references: [id])
+  id           String    @id @default(uuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   degree       String
   institution  String
   fieldOfStudy String?
@@ -59,11 +79,10 @@ model Education {
   updatedAt    DateTime  @updatedAt
 }
 
-// Certifications for user profiles
 model Certification {
-  id                  Int                @id @default(autoincrement())
-  userId              Int
-  user                User               @relation(fields: [userId], references: [id])
+  id                  String             @id @default(uuid())
+  userId              String
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   name                String
   issuingOrganization String
   dateEarned          DateTime
@@ -84,33 +103,32 @@ enum VerificationStatus {
   REJECTED
 }
 
-// Projects and media for portfolios
 model Project {
-  id           Int            @id @default(autoincrement())
-  userId       Int
-  user         User           @relation(fields: [userId], references: [id])
+  id           String          @id @default(uuid())
+  userId       String
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   name         String
   description  String?
   role         String?
   startDate    DateTime
   endDate      DateTime?
-  technologies String[]       @default([])
+  technologies String[]        @default([])
   url          String?
   teamSize     Int?
   outcomes     String?
   industry     String?
-  status       ProjectStatus  @default(COMPLETED)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  status       ProjectStatus   @default(COMPLETED)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
   media        ProjectMedia[]
 }
 
 model ProjectMedia {
-  id        Int       @id @default(autoincrement())
-  projectId Int
-  project   Project   @relation(fields: [projectId], references: [id])
+  id        String     @id @default(uuid())
+  projectId String
+  project   Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
   url       String
-  type      MediaType @default(IMAGE)
+  type      MediaType  @default(IMAGE)
   caption   String?
 }
 
