@@ -18,7 +18,13 @@ export default function Register() {
     setError("");
 
     try {
-      await axios.post("/auth/register", form);
+      // backend expects `firstname` and `lastname` (lowercase). Map fields accordingly.
+      await axios.post("/auth/register", {
+        firstname: form.firstName,
+        lastname: form.lastName,
+        email: form.email,
+        password: form.password,
+      });
       navigate("/dashboard");
     } catch {
       setError("Email already in use");

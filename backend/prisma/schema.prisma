@@ -15,6 +15,11 @@ model User {
   lastname        String
   createdAt       DateTime         @default(now())
   jobApplications JobApplication[]
+
+  // relations added for profile models
+  educations     Education[]
+  certifications Certification[]
+  projects       Project[]
 }
 
 model JobApplication {
@@ -33,4 +38,90 @@ enum ApplicationStatus {
   INTERVIEW
   OFFER
   REJECTED
+}
+
+// Education entries for user profiles
+model Education {
+  id           Int       @id @default(autoincrement())
+  userId       Int
+  user         User      @relation(fields: [userId], references: [id])
+  degree       String
+  institution  String
+  fieldOfStudy String?
+  startDate    DateTime
+  endDate      DateTime?
+  ongoing      Boolean   @default(false)
+  gpa          Float?
+  showGpa      Boolean   @default(true)
+  honors       String[]  @default([])
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// Certifications for user profiles
+model Certification {
+  id                  Int                @id @default(autoincrement())
+  userId              Int
+  user                User               @relation(fields: [userId], references: [id])
+  name                String
+  issuingOrganization String
+  dateEarned          DateTime
+  expirationDate      DateTime?
+  doesNotExpire       Boolean            @default(false)
+  certificationNumber String?
+  documentUrl         String?
+  verificationStatus  VerificationStatus @default(PENDING)
+  renewalReminderDays Int?
+  category            String?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+// Projects and media for portfolios
+model Project {
+  id           Int            @id @default(autoincrement())
+  userId       Int
+  user         User           @relation(fields: [userId], references: [id])
+  name         String
+  description  String?
+  role         String?
+  startDate    DateTime
+  endDate      DateTime?
+  technologies String[]       @default([])
+  url          String?
+  teamSize     Int?
+  outcomes     String?
+  industry     String?
+  status       ProjectStatus  @default(COMPLETED)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  media        ProjectMedia[]
+}
+
+model ProjectMedia {
+  id        Int       @id @default(autoincrement())
+  projectId Int
+  project   Project   @relation(fields: [projectId], references: [id])
+  url       String
+  type      MediaType @default(IMAGE)
+  caption   String?
+}
+
+enum ProjectStatus {
+  COMPLETED
+  ONGOING
+  PLANNED
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  OTHER
 }

@@ -7,7 +7,10 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: any) {
-    return this.authService.register(body.firstname, body.lastname, body.email, body.password);
+    // Accept either `firstname`/`lastname` or `firstName`/`lastName` from clients
+    const firstname = body.firstname ?? body.firstName;
+    const lastname = body.lastname ?? body.lastName;
+    return this.authService.register(firstname, lastname, body.email, body.password);
   }
 
   @Post('login')
