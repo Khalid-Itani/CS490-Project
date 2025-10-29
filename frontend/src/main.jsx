@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import AppLayout from './layouts/AppLayout'
+import App from './App.jsx'
 
 // Pages
 import Dashboard from './pages/Dashboard'
@@ -13,7 +14,10 @@ import Profile from './pages/Profile'
 import CardPreview from './pages/CardPreview'
 import TypographyPreview from './pages/TypographyPreview'
 
-import './index.css' 
+import './styles/theme.css'
+
+// UC-014 color system tokens
+import "./CS490/UC-014/styles/colors.css";
 
 const router = createBrowserRouter([
   {
@@ -36,4 +40,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>,
-)
+

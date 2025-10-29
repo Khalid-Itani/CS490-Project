@@ -1,0 +1,189 @@
+/* Uses UC-014 tokens from colors.css: var(--primary-color), --text-color, etc. */
+.landing {
+  background: #fff; /* explicit white, clean */
+  color: var(--text-color);
+}
+
+/* Containers & layout */
+.container {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding: 24px 20px;
+}
+
+/* Header */
+.lp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lp-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lp-logo {
+  width: 36px;
+  height: 36px;
+  display: block;
+}
+
+.lp-wordmark {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: var(--primary-color);
+}
+
+.lp-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Links & buttons */
+.lp-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn--primary {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  text-align: center;
+  margin-top: 36px;
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  margin: 0;
+  font-size: clamp(28px, 4.2vw, 40px);
+  color: var(--primary-color);
+}
+
+.hero-subtitle {
+  margin: 10px auto 0;
+  max-width: 720px;
+  color: var(--muted-text-color);
+  line-height: 1.6;
+}
+
+.hero-cta {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.hero-meta {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: var(--muted-text-color);
+}
+
+/* Decorative accent (subtle, minimal) */
+.hero-art {
+  position: absolute;
+  inset: -40px 0 auto 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: -1;
+  width: min(900px, 90vw);
+  height: 260px;
+  filter: blur(38px);
+  opacity: 0.18;
+  background:
+    radial-gradient(60% 80% at 50% 50%, var(--accent-color), transparent 70%),
+    radial-gradient(45% 60% at 20% 40%, var(--primary-color), transparent 70%),
+    radial-gradient(40% 50% at 80% 60%, var(--secondary-color), transparent 70%);
+}
+
+/* Features */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  margin: 24px 0 36px;
+}
+
+.feature {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.feature h3 {
+  margin: 6px 0 6px;
+  font-size: 1.05rem;
+  color: var(--text-color);
+}
+
+.feature p {
+  margin: 0;
+  color: var(--muted-text-color);
+  line-height: 1.55;
+}
+
+.feature-icon {
+  font-size: 22px;
+}
+
+/* Footer */
+.lp-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-color);
+  margin-top: 8px;
+  padding-top: 16px;
+}
+
+.lp-footer-links {
+  display: flex;
+  gap: 14px;
+}
+
+.lp-footer a {
+  font-size: 0.9rem;
+}
+
+
+/* Hover/focus polish */
+.btn:hover { filter: brightness(1.05); }
+.btn:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+.lp-link:hover { text-decoration: underline; }
+
+/* Mobile niceties */
+@media (max-width: 520px) {
+  .lp-wordmark { display: none; } /* keep it icon-first on small screens */
+}

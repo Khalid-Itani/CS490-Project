@@ -1,0 +1,77 @@
+/* Auth Card Layout */
+.auth-card-container {
+  min-height: calc(100vh - 70px); /* Leave room for header */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+}
+
+.auth-card {
+  width: 380px;
+  padding: 32px 28px;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.05);
+}
+
+.auth-card h2 {
+  margin-bottom: 16px;
+  color: var(--primary-color);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Logo in card */
+.logo {
+  width: 56px;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+/* Inputs */
+form input {
+  width: 100%;
+  padding: 12px;
+  font-size: .95rem;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+form input:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+}
+
+/* Buttons */
+form button {
+  background: var(--primary-color);
+  width: 100%;
+  padding: 12px;
+  border-radius: 999px;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: .95rem;
+  margin: 8px 0 12px;
+  cursor: pointer;
+}
+
+form button:hover {
+  opacity: .95;
+}
+
+form p {
+  font-size: .9rem;
+}
+
+/* Error messages */
+.error {
+  color: var(--error-color, #D32F2F);
+  font-size: .85rem;
+  margin-bottom: 8px;
+}
