@@ -8,13 +8,14 @@ import { EducationModule } from './education/education.module';
 import { CertificationModule } from './certification/certification.module';
 import { ProjectsModule } from './projects/projects.module';
 import { MailModule } from './mail/mail.module';
+import { SkillsModule } from './skills/skills.module';
 import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env'], // <- ensure backend/.env is loaded
+      envFilePath: ['.env'], // ensures backend/.env is loaded
     }),
     AuthModule,
     ApplicationsModule,
@@ -22,6 +23,7 @@ import { PrismaService } from './prisma/prisma.service';
     CertificationModule,
     ProjectsModule,
     MailModule,
+    SkillsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
