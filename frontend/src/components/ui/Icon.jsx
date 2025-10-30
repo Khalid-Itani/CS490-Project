@@ -70,12 +70,14 @@ const iconMap = {
   job: BiIcons.BiBriefcase,
   company: BiIcons.BiBuildings,
   resume: IoIcons.IoDocument,
+  employment: BiIcons.BiBriefcase,
 
   // New navbar icons you added (unique names)
   home: HiIcons.HiHome,                // if you use a home icon anywhere
   education: HiIcons.HiAcademicCap,    // used for Education
   certifications: HiIcons.HiBadgeCheck,// used for Certifications
   projects: HiIcons.HiCollection,      // used for Projects
+  brain: FaIcons.FaBrain,
 };
 
 

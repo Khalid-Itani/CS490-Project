@@ -6,7 +6,6 @@ import AppLayout from './layouts/AppLayout'
 // Pages
 // Dashboard overview
 import ProfileDashboard from './pages/ProfileDashboard.jsx'
-import Dashboard from './pages/Dashboard'
 import Jobs from './pages/Jobs'
 import JobDetails from './pages/JobDetails'
 import Applications from './pages/Applications'
@@ -17,6 +16,9 @@ import TypographyPreview from './pages/TypographyPreview'
 import EducationPage from './pages/EducationPage'
 import CertificationsPage from './pages/CertificationsPage'
 import ProjectsPage from './pages/ProjectsPage'
+import Skills from './pages/Skills'
+import EmploymentHistoryPage from "./pages/EmploymentHistory";
+
 // Public pages
 import Landing from './pages/Landing'
 import Login from './pages/Login'
@@ -50,9 +52,9 @@ const router = createBrowserRouter([
     element: <AppLayout />, // navbar + breadcrumbs on every child route
     children: [
       { path: '/dashboard', element: <ProfileDashboard /> },
-      { path: '/jobs', element: <Jobs /> },
-      { path: '/jobs/:jobId', element: <JobDetails /> },
-      { path: '/applications', element: <Applications /> },
+      //{ path: '/jobs', element: <Jobs /> },
+      //{ path: '/jobs/:jobId', element: <JobDetails /> },
+      //{ path: '/applications', element: <Applications /> },
       //{ path: '/documents', element: <Documents /> },
       { path: '/profile', element: <Profile /> },
       { path: '/education', element: <EducationPage /> },
@@ -60,6 +62,8 @@ const router = createBrowserRouter([
       { path: '/projects', element: <ProjectsPage /> },
       { path: '/cards', element: <CardPreview /> },
       { path: '/typography', element: <TypographyPreview /> },
+      { path: '/skills', element: <Skills /> },
+      { path: "/employment", element: <EmploymentHistoryPage /> },
     ],
   },
 ])
