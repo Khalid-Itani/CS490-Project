@@ -24,28 +24,27 @@ const ProfileSummary = () => {
 
       <div className="summary-section">
         {profileData.profilePicture ? (
-          <img
-            src={profileData.profilePicture}
-            alt="Profile"
-            className="summary-avatar"
-          />
-        ) : (
-          <img
-            src={defaultAvatar}
-            alt="Default Avatar"
-            className="summary-avatar"
-          />
-        )}
+  <img
+    src={profileData.profilePicture}
+    alt="Profile"
+    className="summary-avatar"
+  />
+) : (
+  <img
+    src={defaultAvatar}
+    alt="Default Avatar"
+    className="summary-avatar"
+  />
+)}
 
         <p><strong>Email:</strong> {profileData.email}</p>
         <p><strong>Phone:</strong> {profileData.phone}</p>
         <p><strong>Location:</strong> {profileData.location}</p>
         <p><strong>Headline:</strong> {profileData.title}</p>
-
         <div className="summary-section">
-          <strong>Bio:</strong>
-          <p className="summary-bio">{profileData.bio}</p>
-        </div>
+  <strong>Bio:</strong>
+  <p className="summary-bio">{profileData.bio}</p>
+</div>
 
         <p><strong>Industry:</strong> {profileData.industry}</p>
         <p><strong>Experience Level:</strong> {profileData.experience}</p>
@@ -65,26 +64,19 @@ const ProfileSummary = () => {
             <p>{job.description}</p>
           </div>
         ))
+        
       )}
-
       <button
-        className="back-btn"
-        onClick={() => {
-          localStorage.removeItem("profileData");
-          localStorage.removeItem("employmentHistory");
-          window.location.href = "/profile/edit";
-        }}
-      >
-        Back to Edit Profile
-      </button>
+  className="back-btn"
+  onClick={() => {
+    localStorage.removeItem("profileData");
+    localStorage.removeItem("employmentHistory");
+    window.location.href = "/";
+  }}
+>
+  Back to Edit Profile
+</button>
 
-      <button
-        className="btn btn--danger"
-        style={{ marginLeft: 12, marginTop: 12 }}
-        onClick={() => (window.location.href = "/delete-account")}
-      >
-        Delete Account
-      </button>
     </div>
   );
 };

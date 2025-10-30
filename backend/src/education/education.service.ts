@@ -20,15 +20,14 @@ export class EducationService {
       showGpa: data.showGpa ?? true,
       honors: data.honors ?? [],
       notes: data.notes,
-      // educationLevel removed, not in Prisma model
     };
-    return (this.prisma as any).education.create({ data: payload });
+  return (this.prisma as any).education.create({ data: payload });
   }
 
-  async findAllByUser(userId: string) {
+  async findAllByUser(userId: number) {
     // Return in reverse chronological order by endDate then startDate
-    return (this.prisma as any).education.findMany({
-      where: { userId: String(userId) },
+  return (this.prisma as any).education.findMany({
+      where: { userId },
       orderBy: [
         { endDate: 'desc' },
         { startDate: 'desc' },
@@ -44,8 +43,7 @@ export class EducationService {
     const data: any = { ...dto };
     if (dto.startDate) data.startDate = new Date(dto.startDate);
     if (dto.endDate !== undefined) data.endDate = dto.endDate ? new Date(dto.endDate) : null;
-    // educationLevel removed, not in Prisma model
-    return (this.prisma as any).education.update({ where: { id }, data });
+  return (this.prisma as any).education.update({ where: { id }, data });
   }
 
   async remove(id: number) {

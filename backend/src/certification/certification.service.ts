@@ -7,7 +7,7 @@ export class CertificationService {
 
   async create(data: any) {
     const payload: any = {
-      user: { connect: { id: String(data.userId) } },
+      user: { connect: { id: data.userId } },
       name: data.name,
       issuingOrganization: data.issuingOrganization,
       dateEarned: new Date(data.dateEarned),
@@ -18,19 +18,11 @@ export class CertificationService {
       category: data.category,
       renewalReminderDays: data.renewalReminderDays,
     };
-    // Debug logging
-    console.log('CertificationService.create called with userId:', data.userId);
-    console.log('Payload for Prisma:', JSON.stringify(payload, null, 2));
-    try {
-      return await (this.prisma as any).certification.create({ data: payload });
-    } catch (err) {
-      console.error('Prisma error during certification.create:', err);
-      throw err;
-    }
+  return (this.prisma as any).certification.create({ data: payload });
   }
 
-  async findAllByUser(userId: string) {
-    return (this.prisma as any).certification.findMany({ where: { userId: String(userId) }, orderBy: { dateEarned: 'desc' } });
+  async findAllByUser(userId: number) {
+  return (this.prisma as any).certification.findMany({ where: { userId }, orderBy: { dateEarned: 'desc' } });
   }
 
   async findOne(id: number) {

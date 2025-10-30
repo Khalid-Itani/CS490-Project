@@ -12,7 +12,7 @@ export class CertificationController {
 
   @Get('user/:userId')
   findAllByUser(@Param('userId') userId: string) {
-    return this.certService.findAllByUser(userId);
+    return this.certService.findAllByUser(Number(userId));
   }
 
   @Get(':id')

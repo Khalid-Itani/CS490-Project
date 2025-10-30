@@ -12,7 +12,7 @@ export class ProjectsController {
 
   @Get('user/:userId')
   findAllByUser(@Param('userId') userId: string) {
-    return this.projectsService.findAllByUser(userId);
+    return this.projectsService.findAllByUser(Number(userId));
   }
 
   @Get(':id')

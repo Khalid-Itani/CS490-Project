@@ -51,21 +51,18 @@ export default function ProfileDashboard() {
   return (
     <div style={{ padding: 20 }}>
       <h2>Profile Overview</h2>
-      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-        <div style={{ border: '1px solid #ddd', padding: 12, borderRadius: 8, minWidth: 220 }}>
+      <div style={{ display: 'flex', gap: 12 }}>
+        <div style={{ border: '1px solid #ddd', padding: 12 }}>
           <h4>Education</h4>
           <p>{summary.educationCount ?? 0} entries</p>
-          <a href="/education">+ Quick add</a>
         </div>
-        <div style={{ border: '1px solid #ddd', padding: 12, borderRadius: 8, minWidth: 220 }}>
+        <div style={{ border: '1px solid #ddd', padding: 12 }}>
           <h4>Certifications</h4>
           <p>{summary.certificationCount ?? 0} entries</p>
-          <a href="/certifications">+ Quick add</a>
         </div>
-        <div style={{ border: '1px solid #ddd', padding: 12, borderRadius: 8, minWidth: 220 }}>
+        <div style={{ border: '1px solid #ddd', padding: 12 }}>
           <h4>Projects</h4>
           <p>{summary.projectCount ?? 0} entries</p>
-          <a href="/projects">+ Quick add</a>
         </div>
       </div>
 
@@ -94,11 +91,6 @@ export default function ProfileDashboard() {
         <h4>Profile Strength</h4>
         <div style={{ width: 300, background: '#eee' }}>
           <div style={{ width: `${Math.min(100, Math.max(0, score))}%`, background: '#4caf50', color: '#fff', padding: 8 }}>{score}%</div>
-        </div>
-        <div style={{ marginTop: 8, color: '#6b7280' }}>
-          {score < 50 && <div>Add more education and at least one project to boost your profile.</div>}
-          {score >= 50 && score < 80 && <div>Great start! Add certifications and project outcomes for a stronger profile.</div>}
-          {score >= 80 && <div>Strong profile. Keep it up by keeping entries current.</div>}
         </div>
       </div>
     </div>
