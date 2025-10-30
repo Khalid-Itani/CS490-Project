@@ -1,6 +1,6 @@
 import type { Skill, SkillCategory, SkillProficiency } from '../types/skills';
 
-const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5173'; // adjust if proxied
+const BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3000'; // adjust if proxied
 
 export async function listSkills(userId: string, search?: string): Promise<Skill[]> {
   const url = new URL(`${BASE}/skills`);
