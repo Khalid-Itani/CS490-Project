@@ -1,19 +1,57 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+// Helper to get JWT token from localStorage
+function getToken() {
+  return window.localStorage.getItem('token');
+}
 
 const API = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
 
 export default function ProjectsPage() {
+  const [currentUser, setCurrentUser] = useState<{ id: string; email: string } | null>(null);
+  const [debugToken, setDebugToken] = useState<string | null>(null);
+  const [debugError, setDebugError] = useState<string | null>(null);
+  const navigate = useNavigate ? useNavigate() : null;
+
+  // Redirect to login if no token
+  useEffect(() => {
+    const token = getToken();
+    setDebugToken(token || null);
+    if (!token && navigate) {
+      navigate('/login');
+      return;
+    }
+    if (!token) {
+      setDebugError('No token found in localStorage.');
+      return;
+    }
+    axios.get(`${API}/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => {
+        if (r.data?.user) {
+          setCurrentUser({ id: r.data.user.id, email: r.data.user.email });
+          setDebugError(null);
+        } else {
+          setCurrentUser(null);
+          setDebugError('No user object in response.');
+        }
+      })
+      .catch((err) => {
+        setCurrentUser(null);
+        setDebugError(err?.response?.data?.error || err?.message || 'Unknown error fetching user info.');
+      });
+  }, []);
   const [items, setItems] = useState<any[]>([]);
-  const [form, setForm] = useState<any>({ userId: 1, name: '', description: '', role: '', startDate: '', endDate: '', technologies: '', url: '', teamSize: '', outcomes: '', industry: '', status: 'Planned' });
+  const currentUserId = window.localStorage.getItem('userId') || 'demo-user-uuid';
+  const [form, setForm] = useState<any>({ userId: currentUserId, name: '', description: '', role: '', startDate: '', endDate: '', technologies: '', url: '', teamSize: '', outcomes: '', industry: '', status: 'Planned' });
   const [mediaFile, setMediaFile] = useState<string | null>(null);
   const [filters, setFilters] = useState({ tech: '', industry: '', status: '', sort: 'date-desc' });
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<any | null>(null);
 
   useEffect(() => {
-    axios.get(`${API}/projects/user/1`).then((r) => setItems(r.data)).catch(() => {});
-  }, []);
+    axios.get(`${API}/projects/user/${currentUserId}`).then((r) => setItems(r.data)).catch(() => {});
+  }, [currentUserId]);
 
   const filtered = useMemo(() => {
     let list = [...items];
@@ -34,6 +72,20 @@ export default function ProjectsPage() {
 
   return (
     <div style={{ padding: 20 }}>
+      {currentUser ? (
+        <div style={{ marginBottom: 16, background: '#f3f4f6', padding: 10, borderRadius: 6 }}>
+          <strong>Logged in as:</strong> {currentUser.email}<br />
+          <strong>User ID:</strong> {currentUser.id}
+        </div>
+      ) : (
+        <div style={{ marginBottom: 16, background: '#fee2e2', color: '#991b1b', padding: 10, borderRadius: 6 }}>
+          <strong>No user info found.</strong> You may not be logged in, or there was an error fetching your user ID.<br />
+          <div style={{ marginTop: 8, fontSize: 13 }}>
+            <strong>Token:</strong> {debugToken ? debugToken : <span style={{ color: '#991b1b' }}>None</span>}<br />
+            <strong>Backend error:</strong> {debugError}
+          </div>
+        </div>
+      )}
       <h2>Projects</h2>
       <div style={{ marginBottom: 20 }}>
         <h3>Add project</h3>
@@ -64,8 +116,8 @@ export default function ProjectsPage() {
               await axios.post(`${API}/projects/${proj.id}/media`, { url: mediaFile, type: 'IMAGE' });
             }
             setMediaFile(null);
-            setForm({ userId: 1, name: '', description: '', role: '', startDate: '', endDate: '', technologies: '', url: '', teamSize: '', outcomes: '', industry: '', status: 'Planned' });
-            axios.get(`${API}/projects/user/1`).then((r) => setItems(r.data));
+            setForm({ userId: currentUserId, name: '', description: '', role: '', startDate: '', endDate: '', technologies: '', url: '', teamSize: '', outcomes: '', industry: '', status: 'Planned' });
+            axios.get(`${API}/projects/user/${currentUserId}`).then((r) => setItems(r.data));
           }}>Add</button>
         </div>
       </div>

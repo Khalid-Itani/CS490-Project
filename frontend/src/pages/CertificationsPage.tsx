@@ -1,20 +1,63 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
+import { useEffect as useReactEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+// Helper to get JWT token from localStorage
+function getToken() {
+  return window.localStorage.getItem('token');
+}
 
 const API = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
 
-export default function CertificationsPage() {
+type Props = { userId?: string };
+export default function CertificationsPage({ userId }: Props) {
+  const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState<{ id: string; email: string } | null>(null);
+  const [debugToken, setDebugToken] = useState<string | null>(null);
+  const [debugError, setDebugError] = useState<string | null>(null);
+  // Fetch current user info from backend
+  useEffect(() => {
+    // Redirect to login if no token
+    if (!window.localStorage.getItem('token')) {
+      navigate('/login');
+      return;
+    }
+    const token = getToken();
+    setDebugToken(token || null);
+    if (!token) {
+      setDebugError('No token found in localStorage.');
+      return;
+    }
+    axios.get(`${API}/auth/me`, { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => {
+        if (r.data?.user) {
+          setCurrentUser({ id: r.data.user.id, email: r.data.user.email });
+          setDebugError(null);
+        } else {
+          setCurrentUser(null);
+          setDebugError('No user object in response.');
+        }
+      })
+      .catch((err) => {
+        setCurrentUser(null);
+        setDebugError(err?.response?.data?.error || err?.message || 'Unknown error fetching user info.');
+      });
+  }, []);
   const [items, setItems] = useState<any[]>([]);
-  const [form, setForm] = useState<any>({ userId: 1, name: '', issuingOrganization: '', dateEarned: '', expirationDate: '', doesNotExpire: false, certificationNumber: '', documentUrl: '', category: '', renewalReminderDays: 30 });
+  // Use userId from props, or fallback to localStorage
+  const currentUserId = userId || window.localStorage.getItem('userId');
+  const [form, setForm] = useState<any>({ userId: currentUserId, name: '', issuingOrganization: '', dateEarned: '', expirationDate: '', doesNotExpire: false, certificationNumber: '', documentUrl: '', category: '', renewalReminderDays: 30 });
   const [orgQuery, setOrgQuery] = useState('');
   const [orgOptions, setOrgOptions] = useState<string[]>([]);
   const [uploadPreview, setUploadPreview] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<any | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get(`${API}/certifications/user/1`).then((r) => setItems(r.data)).catch(() => {});
-  }, []);
+  if (!currentUserId) return;
+  axios.get(`${API}/certifications/user/${currentUserId}`).then((r) => setItems(r.data)).catch(() => {});
+  }, [currentUserId]);
 
   useEffect(() => {
     if (!orgQuery) { setOrgOptions([]); return; }
@@ -42,6 +85,23 @@ export default function CertificationsPage() {
 
   return (
     <div style={{ padding: 20 }}>
+      {currentUser ? (
+        <div style={{ marginBottom: 16, background: '#f3f4f6', padding: 10, borderRadius: 6 }}>
+          <strong>Logged in as:</strong> {currentUser.email}<br />
+          <strong>User ID:</strong> {currentUser.id}
+        </div>
+      ) : (
+        <div style={{ marginBottom: 16, background: '#fee2e2', color: '#991b1b', padding: 10, borderRadius: 6 }}>
+          <strong>No user info found.</strong> You may not be logged in, or there was an error fetching your user ID.<br />
+          <div style={{ marginTop: 8, fontSize: 13 }}>
+            <strong>Token:</strong> {debugToken ? debugToken : <span style={{ color: '#991b1b' }}>None</span>}<br />
+            <strong>Backend error:</strong> {debugError}
+          </div>
+        </div>
+      )}
+      {errorMsg && (
+        <div style={{ color: 'red', marginBottom: 10 }}>{errorMsg}</div>
+      )}
       <h2>Certifications</h2>
       <div style={{ marginBottom: 20 }}>
         <h3>Add certification</h3>
@@ -74,7 +134,18 @@ export default function CertificationsPage() {
           {uploadPreview && (
             <a href={uploadPreview} target="_blank" rel="noreferrer">Preview</a>
           )}
-          <button onClick={() => { axios.post(`${API}/certifications`, form).then(() => axios.get(`${API}/certifications/user/1`).then((r) => setItems(r.data))); }}>Add</button>
+          <button onClick={() => {
+            setErrorMsg(null);
+            if (!currentUserId) {
+              setErrorMsg('No userId found. Please log in again.');
+              return;
+            }
+            axios.post(`${API}/certifications`, { ...form, userId: currentUserId })
+              .then(() => axios.get(`${API}/certifications/user/${currentUserId}`).then((r) => setItems(r.data)))
+              .catch((err) => {
+                setErrorMsg(err?.response?.data?.message || 'Failed to add certification. Please check your input and try again.');
+              });
+          }}>Add</button>
         </div>
       </div>
       <ul>
@@ -121,7 +192,8 @@ export default function CertificationsPage() {
                   <div style={{ marginTop: 6 }}>
                     <button onClick={() => {
                       if (!confirm('Delete this certification?')) return;
-                      axios.delete(`${API}/certifications/${c.id}`).then(() => axios.get(`${API}/certifications/user/1`).then((r) => setItems(r.data)));
+                      if (!currentUserId) return;
+                      axios.delete(`${API}/certifications/${c.id}`).then(() => axios.get(`${API}/certifications/user/${currentUserId}`).then((r) => setItems(r.data)));
                     }}>Delete</button>
                   </div>
                 </div>
