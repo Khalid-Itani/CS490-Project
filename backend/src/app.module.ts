@@ -7,9 +7,11 @@ import { EducationModule } from './education/education.module';
 import { CertificationModule } from './certification/certification.module';
 import { ProjectsModule } from './projects/projects.module';
 import { PrismaService } from './prisma/prisma.service';  
+import { SkillsModule } from './skills/skills.module';
+
 
 @Module({
-  imports: [AuthModule, ApplicationsModule, EducationModule, CertificationModule, ProjectsModule],
+  imports: [AuthModule, ApplicationsModule, EducationModule, CertificationModule, ProjectsModule, SkillsModule],
   controllers: [AppController],
   providers: [AppService, PrismaService],
   exports: [AppService, PrismaService],
