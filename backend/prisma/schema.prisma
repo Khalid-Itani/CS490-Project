@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id              Int              @id @default(autoincrement())
-  email           String           @unique
+  id              String           @id @default(uuid())
+  email           String           @unique @db.VarChar(255)
   password        String
   firstname       String
   lastname        String
   createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt @default(now())
   jobApplications JobApplication[]
 
   // relations added for profile models
@@ -29,7 +30,7 @@ model JobApplication {
   status        ApplicationStatus @default(APPLIED)
   appliedDate   DateTime?
   notes         String?
-  userId        Int
+  userId        String
   user          User              @relation(fields: [userId], references: [id])
 }
 
@@ -43,7 +44,7 @@ enum ApplicationStatus {
 // Education entries for user profiles
 model Education {
   id           Int       @id @default(autoincrement())
-  userId       Int
+  userId       String
   user         User      @relation(fields: [userId], references: [id])
   degree       String
   institution  String
@@ -62,7 +63,7 @@ model Education {
 // Certifications for user profiles
 model Certification {
   id                  Int                @id @default(autoincrement())
-  userId              Int
+  userId              String
   user                User               @relation(fields: [userId], references: [id])
   name                String
   issuingOrganization String
@@ -87,7 +88,7 @@ enum VerificationStatus {
 // Projects and media for portfolios
 model Project {
   id           Int            @id @default(autoincrement())
-  userId       Int
+  userId       String
   user         User           @relation(fields: [userId], references: [id])
   name         String
   description  String?

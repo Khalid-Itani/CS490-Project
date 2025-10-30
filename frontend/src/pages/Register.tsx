@@ -112,6 +112,14 @@ export default function Register() {
           <button type="submit" disabled={submitting}>
             {submitting ? "Creating..." : "Register"}
           </button>
+          <div style={{ margin: '16px 0' }}>
+            <button type="button" className="btn btn--oauth" onClick={() => window.location.href = '/auth/google'}>
+              Sign up with Google
+            </button>
+            <button type="button" className="btn btn--oauth" onClick={() => window.location.href = '/auth/linkedin'}>
+              Sign up with LinkedIn
+            </button>
+          </div>
           <p>
             <Link to="/login">Already have an account? Login →</Link>
           </p>

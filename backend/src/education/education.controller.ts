@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from '@nestjs/common';
 import { EducationService } from './education.service';
 import { CreateEducationDto } from './dto/create-education.dto';
+import { CreateEducationValidation } from './dto/education-validation.decorator';
 import { UpdateEducationDto } from './dto/update-education.dto';
 
 @Controller('education')
@@ -8,13 +9,14 @@ export class EducationController {
   constructor(private readonly educationService: EducationService) {}
 
   @Post()
-  create(@Body() dto: CreateEducationDto) {
+  @UsePipes(new ValidationPipe({ transform: true }))
+  create(@Body() dto: CreateEducationValidation) {
     return this.educationService.create(dto);
   }
 
   @Get('user/:userId')
   findAllByUser(@Param('userId') userId: string) {
-    return this.educationService.findAllByUser(Number(userId));
+    return this.educationService.findAllByUser(userId);
   }
 
   @Get(':id')

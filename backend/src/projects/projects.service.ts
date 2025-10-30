@@ -6,8 +6,18 @@ export class ProjectsService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: any) {
+    // Map status string to ProjectStatus enum value
+    let statusEnum = 'COMPLETED';
+    if (typeof data.status === 'string') {
+      const statusMap: Record<string, string> = {
+        'Completed': 'COMPLETED',
+        'Ongoing': 'ONGOING',
+        'Planned': 'PLANNED',
+      };
+      statusEnum = statusMap[data.status] || 'COMPLETED';
+    }
     const payload: any = {
-      user: { connect: { id: data.userId } },
+      user: { connect: { id: String(data.userId) } },
       name: data.name,
       description: data.description,
       role: data.role,
@@ -18,13 +28,13 @@ export class ProjectsService {
       teamSize: data.teamSize,
       outcomes: data.outcomes,
       industry: data.industry,
-      status: data.status,
+      status: statusEnum,
     };
-  return (this.prisma as any).project.create({ data: payload });
+    return (this.prisma as any).project.create({ data: payload });
   }
 
-  async findAllByUser(userId: number) {
-  return (this.prisma as any).project.findMany({ where: { userId }, orderBy: { startDate: 'desc' } });
+  async findAllByUser(userId: string) {
+    return (this.prisma as any).project.findMany({ where: { userId: String(userId) }, orderBy: { startDate: 'desc' } });
   }
 
   async findOne(id: number) {
