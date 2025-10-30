@@ -5,12 +5,12 @@ import AppLayout from './layouts/AppLayout'
 
 // Pages
 // Dashboard overview
-import ProfileDashboard from './pages/ProfileDashboard'
+import ProfileDashboard from './pages/ProfileDashboard.jsx'
 import Dashboard from './pages/Dashboard'
 import Jobs from './pages/Jobs'
 import JobDetails from './pages/JobDetails'
 import Applications from './pages/Applications'
-import Documents from './pages/Documents'
+//import Documents from './pages/Documents'
 import Profile from './pages/Profile'
 import CardPreview from './pages/CardPreview'
 import TypographyPreview from './pages/TypographyPreview'
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
       { path: '/jobs', element: <Jobs /> },
       { path: '/jobs/:jobId', element: <JobDetails /> },
       { path: '/applications', element: <Applications /> },
-      { path: '/documents', element: <Documents /> },
+      //{ path: '/documents', element: <Documents /> },
       { path: '/profile', element: <Profile /> },
       { path: '/education', element: <EducationPage /> },
       { path: '/certifications', element: <CertificationsPage /> },

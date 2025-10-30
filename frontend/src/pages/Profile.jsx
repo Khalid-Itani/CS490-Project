@@ -1,7 +1,7 @@
 export default function Profile() {
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Profile</h1>
+      <h1 className="text-2xl font-semibold text-gray-900">Profile</h1>
 
       <form className="space-y-6 max-w-3xl">
         {/* Basic info grid — stacks on mobile, 2 cols on sm+, 3 cols on lg */}
