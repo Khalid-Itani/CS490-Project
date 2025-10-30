@@ -1,3 +1,6 @@
+import Logout from "./pages/Logout";
+import DeleteAccount from "./pages/DeleteAccount";
+// src/App.jsx
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
@@ -16,6 +19,11 @@ import ProfileForm from "./components/ProfileForm";
 import ProfileSummary from "./components/ProfileSummary";
 import PasswordResetRequest from "./pages/PasswordResetRequest";
 import PasswordResetComplete from "./pages/PasswordResetComplete";
+
+// TEMP stubs if these components don't exist yet
+const Logout = () => <div>Logging out…</div>;
+const DeleteAccount = () => <div>Delete account</div>;
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -26,25 +34,24 @@ export default function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-  <Route path="/reset-password" element={<PasswordResetRequest />} />
-  <Route path="/reset-password/:token" element={<PasswordResetComplete />} />
-  <Route path="/logout" element={<Logout />} />
+
+        {/* CORRECT reset routes */}
+        <Route path="/forgot-password" element={<div data-test="fp-stub">FP STUB</div>} />
+        <Route path="/reset/:token" element={<PasswordResetComplete />} />
+
+        {/* Other pages */}
+        <Route path="/logout" element={<Logout />} />
         <Route path="/typography" element={<TypographyPreview />} />
         <Route path="/icons" element={<IconDemo />} />
 
-        {/* Dashboard + Profile Sections */}
+        {/* Dashboard + Profile */}
         <Route path="/dashboard" element={<ProfileDashboard />} />
         <Route path="/education" element={<EducationPage />} />
         <Route path="/certifications" element={<CertificationsPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
-
-        {/* New Profile Completion pages */}
-  <Route path="/profile/edit" element={<ProfileForm />} />
-  <Route path="/profile/summary" element={<ProfileSummary />} />
-  <Route path="/delete-account" element={<DeleteAccount />} />
-
-        {/* Optional fallback 404 later */}
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="/profile/edit" element={<ProfileForm />} />
+        <Route path="/profile/summary" element={<ProfileSummary />} />
+        <Route path="/delete-account" element={<DeleteAccount />} />
       </Routes>
     </BrowserRouter>
   );
