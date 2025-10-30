@@ -13,8 +13,15 @@ export default function Login() {
     setError("");
 
     try {
-      await axios.post("/auth/login", form);
-      navigate("/dashboard");
+      // Expect login response to include user object with id and token
+      const res = await axios.post("/auth/login", form);
+      if (res.data && res.data.token && res.data.user && res.data.user.id) {
+        window.localStorage.setItem('token', res.data.token);
+        window.localStorage.setItem('userId', res.data.user.id);
+        navigate("/dashboard");
+      } else {
+        setError("Login response missing token or user id");
+      }
     } catch {
       setError("Invalid email or password");
     }

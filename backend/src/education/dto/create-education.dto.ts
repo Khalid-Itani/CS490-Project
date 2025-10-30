@@ -1,3 +1,5 @@
+import { EducationLevel } from './education-level.enum';
+
 export class CreateEducationDto {
   userId: number;
   degree: string;
@@ -10,4 +12,5 @@ export class CreateEducationDto {
   showGpa?: boolean;
   honors?: string[];
   notes?: string;
+  educationLevel: EducationLevel;
 }

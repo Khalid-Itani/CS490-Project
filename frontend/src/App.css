@@ -1,4 +1,21 @@
-<<<<<<< HEAD
+/* Global layout setup */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f9fafb;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: none;
+}
+
+/* App container styling */
 .App {
   max-width: 500px;
   margin: 60px auto;
@@ -8,16 +25,10 @@
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
-=======
-html, body, #root { height: 100%; }
-body { margin: 0; background: #f9fafb; }       
-#root { margin: 0; padding: 0; width: 100%; max-width: none; }
 
->>>>>>> origin/feat/ui-uc015-uc020
-
+/* Typography */
 h1 {
   font-size: 2rem;
   margin-bottom: 25px;
   color: #333;
 }
-

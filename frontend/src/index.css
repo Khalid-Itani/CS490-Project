@@ -1,3 +1,6 @@
+/* ================================
+   Global Variables and Typography
+   ================================ */
 :root {
   /* Typography & base */
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -7,53 +10,54 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Brand palette */
+  /* Brand palette (merged HEAD + demo) */
   --primary-color:    #1e88e5;
   --secondary-color:  #1565c0;
   --accent-color:     #42a5f5;
-
   --success-color:    #4caf50;
   --warning-color:    #ffb300;
   --error-color:      #e53935;
   --info-color:       #29b6f6;
-
   --text-color:       #212121;
-  --muted-text-color: #6b7280;   /* gray-500 */
-  --background-color: #fafafa;   /* app background */
-  --panel-bg:         #ffffff;   /* card surface */
-  --border-color:     #e5e7eb;   /* gray-200 */
+  --muted-text-color: #6b7280;
+  --background-color: #fafafa;
+  --panel-bg:         #ffffff;
+  --border-color:     #e5e7eb;
 }
 
-/* Apply to page */
-html, body, #root { height: 100%; }
+/* Page structure */
+html, body, #root {
+  height: 100%;
+}
+
 body {
   color: var(--text-color);
   background: var(--background-color);
 }
-
 
 /* Tailwind entry points */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
+/* ================================
+   Base Layer
+   ================================ */
 @layer base {
-  /* Base page sizing */
   html { font-size: 16px; }
 
-  /* Body: primary font, body size & color */
   body {
     @apply font-sans text-body text-gray-800 bg-white;
     margin: 0;
-    display: block; 
+    display: block;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #f2f2f2;
     min-width: 320px;
     min-height: 100vh;
   }
 
-  /* Headings: use secondary heading font and stronger weight */
+  /* Headings */
   h1 { @apply font-heading text-h1 font-semibold text-gray-900; margin: 0 0 0.5rem; }
   h2 { @apply font-heading text-h2 font-semibold text-gray-900; margin: 0 0 0.5rem; }
   h3 { @apply font-heading text-h3 font-semibold text-gray-900; margin: 0 0 0.4rem; }
@@ -61,94 +65,49 @@ body {
   h5 { @apply font-heading text-h5 font-medium text-gray-900; margin: 0 0 0.3rem; }
   h6 { @apply font-heading text-h6 font-medium text-gray-900; margin: 0 0 0.3rem; }
 
-  
-  p, ul, ol, dl {
-    @apply text-body mb-4;
-  }
+  /* Paragraphs and lists */
+  p, ul, ol, dl { @apply text-body mb-4; }
 
-  /* Captions / small text */
-  small, .caption {
-    @apply text-caption text-gray-600;
-  }
+  /* Small text / captions */
+  small, .caption { @apply text-caption text-gray-600; }
 
-  /* Links and interactive text */
-  a {
-    @apply text-indigo-600 font-medium;
-    text-decoration: none;
-  }
+  /* Links */
+  a { @apply text-indigo-600 font-medium; text-decoration: none; }
   a:hover { @apply text-indigo-700 underline; }
 
-  /* Buttons*/
-  button {
-    @apply rounded-md px-3 py-2;
+  /* Buttons */
+  button { @apply rounded-md px-3 py-2; }
+
+  /* Light / dark theme toggle */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color: rgba(255, 255, 255, 0.87);
+      background-color: #242424;
+    }
+    a:hover { color: #535bf2; }
+    button { background-color: #1a1a1a; }
   }
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  display: block;
-  min-width: 320px;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-  /* ensure touch targets meet recommended minimum */
-  min-height: 40px;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: dark) {
-  /* switch to dark theme when user prefers dark */
-  :root {
-    color: rgba(255, 255, 255, 0.87);
-    background-color: #242424;
-  }
-  a:hover { color: #535bf2; }
-  button { background-color: #1a1a1a; }
-}
-
+/* ================================
+   Component Layer (Buttons, Forms)
+   ================================ */
 @layer components {
   /* Button base */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200;
+    @apply inline-flex items-center justify-center gap-2 font-medium transition-all duration-200 rounded-md;
     @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2;
-    @apply disabled:cursor-not-allowed disabled:opacity-60;
-    @apply relative; /* For loading state */
+    @apply disabled:cursor-not-allowed disabled:opacity-60 relative;
   }
 
-  /* Variants */
+  /* Button Variants */
   .btn-primary {
     @apply bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 shadow-sm;
     @apply disabled:bg-indigo-300 disabled:shadow-none;
   }
 
   .btn-secondary {
-    @apply bg-white text-gray-800 border border-gray-300 hover:bg-gray-50 active:bg-gray-100;
-    @apply hover:border-gray-400 shadow-sm;
+    @apply bg-white text-gray-800 border border-gray-300 hover:bg-gray-50 active:bg-gray-100 hover:border-gray-400 shadow-sm;
     @apply disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-200 disabled:shadow-none;
   }
 
@@ -163,77 +122,33 @@ button:focus-visible {
   }
 
   /* Sizes */
-  .btn-sm { 
-    @apply text-sm px-2.5 py-1.5 h-8;
-    @apply rounded; /* Slightly smaller radius */
-  }
-  .btn-md { 
-    @apply text-base px-3 py-2 h-10;
-  }
-  .btn-lg { 
-    @apply text-lg px-4 py-2.5 h-12;
-    @apply rounded-lg; /* Slightly larger radius */
-  }
+  .btn-sm { @apply text-sm px-2.5 py-1.5 h-8 rounded; }
+  .btn-md { @apply text-base px-3 py-2 h-10; }
+  .btn-lg { @apply text-lg px-4 py-2.5 h-12 rounded-lg; }
 
-  /* Loading state */
-  .btn[data-loading="true"] {
-    @apply cursor-wait;
-  }
-  
-  .btn[data-loading="true"] > :not(.btn-spinner) {
-    @apply opacity-0;
-  }
-  
-  .btn .btn-spinner {
-    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
-    @apply opacity-0 scale-50 transition-all duration-200;
-  }
-  
-  .btn[data-loading="true"] .btn-spinner {
-    @apply opacity-100 scale-100;
-  }
-
-  /* Loading - use attribute data-loading=\"true\" or class `.is-loading` */
-  .btn[data-loading="true"] {
-    @apply cursor-wait opacity-90;
-  }
+  /* Loading states */
+  .btn[data-loading="true"] { @apply cursor-wait opacity-90; }
   .btn[data-loading="true"] > .btn-spinner { @apply animate-spin h-4 w-4; }
 
-  /* Form Layout */
-  .form-group {
-    @apply space-y-1.5 mb-4;
-  }
+  /* Form Elements */
+  .form-group { @apply space-y-1.5 mb-4; }
+  .form-row { @apply flex flex-wrap gap-4 mb-4; }
 
-  .form-row {
-    @apply flex flex-wrap gap-4 mb-4;
-  }
-
-  /* Labels */
   .form-label { 
-    @apply block text-sm font-medium text-gray-700;
-    @apply select-none cursor-pointer;
+    @apply block text-sm font-medium text-gray-700 select-none cursor-pointer;
   }
 
-  .form-label.required::after {
-    content: "*";
-    @apply text-red-500 ml-1;
-  }
+  .form-label.required::after { content: "*"; @apply text-red-500 ml-1; }
 
-  /* Input fields */
   .input {
-    @apply block w-full rounded-md border border-gray-300 bg-white;
-    @apply px-3 py-2 text-base text-gray-900;
-    @apply placeholder-gray-400;
-    @apply transition duration-200;
+    @apply block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-base text-gray-900 placeholder-gray-400 transition duration-200;
     @apply disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed;
   }
 
   .input:focus {
-    @apply outline-none ring-2 ring-indigo-400 border-indigo-500;
-    @apply ring-offset-0;
+    @apply outline-none ring-2 ring-indigo-400 border-indigo-500 ring-offset-0;
   }
 
-  /* Select fields */
   select.input {
     @apply pr-10;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
@@ -244,142 +159,53 @@ button:focus-visible {
     print-color-adjust: exact;
   }
 
-  /* Textareas */
-  textarea.input {
-    @apply min-h-[6rem] resize-y;
-  }
+  textarea.input { @apply min-h-[6rem] resize-y; }
 
-  /* Error states */
-  .input-error {
-    @apply border-red-500 ring-2 ring-red-100;
-    @apply focus:border-red-500 focus:ring-red-200;
-  }
-
+  /* Input errors */
+  .input-error { @apply border-red-500 ring-2 ring-red-100; }
   .form-error {
     @apply text-sm text-red-600 mt-1 flex items-center gap-1;
   }
-
-  .form-error::before {
-    content: "⚠";
-    @apply text-xs;
-  }
+  .form-error::before { content: "⚠"; @apply text-xs; }
 
   /* Help text */
-  .form-help { 
-    @apply text-sm text-gray-500 mt-1;
-  }
+  .form-help { @apply text-sm text-gray-500 mt-1; }
 
-  /* Input groups */
-  .input-group {
-    @apply relative flex rounded-md shadow-sm;
-  }
-
-  .input-group > .input:not(:last-child) {
-    @apply rounded-r-none border-r-0;
-  }
-
-  .input-group > .input:not(:first-child) {
-    @apply rounded-l-none;
-  }
-
+  /* Input group */
+  .input-group { @apply relative flex rounded-md shadow-sm; }
+  .input-group > .input:not(:last-child) { @apply rounded-r-none border-r-0; }
+  .input-group > .input:not(:first-child) { @apply rounded-l-none; }
   .input-group-text {
     @apply inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm;
   }
 
-  /* Checkbox and Radio */
+  /* Checkboxes / Radios */
   .checkbox, .radio {
-    @apply h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300;
-    @apply transition duration-200;
+    @apply h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 transition duration-200;
   }
+  .radio { @apply rounded-full; }
+  .checkbox { @apply rounded; }
 
-  .radio {
-    @apply rounded-full;
-  }
+  /* Form Sections */
+  .form-section { @apply space-y-4 py-4; }
+  .form-section:not(:last-child) { @apply border-b border-gray-200; }
+  .form-section-title { @apply text-lg font-medium text-gray-900 mb-2; }
 
-  .checkbox {
-    @apply rounded;
-  }
-
-  /* Loading state */
-  .input[data-loading="true"] {
-    @apply bg-gray-50 cursor-wait;
-  }
-
-  /* Form sections */
-  .form-section {
-    @apply space-y-4 py-4;
-  }
-
-  .form-section:not(:last-child) {
-    @apply border-b border-gray-200;
-  }
-
-  .form-section-title {
-    @apply text-lg font-medium text-gray-900 mb-2;
-  }
-
-  /* Form actions */
+  /* Form Actions */
   .form-actions {
-    @apply flex flex-wrap items-center gap-3 mt-6 pt-4;
-    @apply border-t border-gray-200;
+    @apply flex flex-wrap items-center gap-3 mt-6 pt-4 border-t border-gray-200;
   }
 
+  /* Page Card Components */
+  .page-card { @apply bg-white border border-gray-200 rounded-xl shadow-sm; }
+  .page-card-inner { @apply p-4 sm:p-6 lg:p-8; }
 }
+
+/* ================================
+   Utility Layer
+   ================================ */
 @layer utilities {
   .touch-target { min-height: 44px; min-width: 44px; }
   .prose-img { max-width: 100%; height: auto; }
-  /* Prevent layout jank on tiny screens */
   .no-h-scroll { overflow-x: hidden; }
-}
-
-
- .page-card {
-    @apply bg-white border border-gray-200 rounded-xl shadow-sm;
-  }
-
-  /* Optional: matching padding */
-  .page-card-inner {
-    @apply p-4 sm:p-6 lg:p-8;
-  }
-
-  @layer components {
-  /* Colors (adjust once to change everywhere) */
-  :root {
-    --btn-primary: #1e88e5;   /* blue-600 */
-    --btn-primary-hover: #1e88e5; /* blue-700 */
-    --btn-ring: 59 130 246;   /* blue-500 as RGB for ring */
-  }
-
-  /* Base button */
-  .btn {
-    @apply inline-flex items-center justify-center font-semibold text-sm
-           rounded-xl px-4 py-2 transition focus:outline-none
-           disabled:opacity-60 disabled:cursor-not-allowed;
-  }
-  .btn:focus-visible {
-    box-shadow: 0 0 0 4px rgba(var(--btn-ring) / 0.15);
-  }
-
-  /* Variants */
-  .btn-primary {
-    background: var(--btn-primary);
-    color: #fff;
-  }
-  .btn-primary:hover { background: var(--btn-primary-hover); }
-
-  .btn-secondary {
-    @apply bg-gray-800 text-white hover:bg-gray-700;
-  }
-
-  .btn-outline {
-    @apply border border-gray-300 bg-white text-gray-800 hover:bg-gray-50;
-  }
-
-  .btn-danger {
-    @apply bg-red-600 text-white hover:bg-red-700;
-  }
-
-  /* Optional sizes */
-  .btn-sm { @apply px-3 py-1.5 text-xs rounded-lg; }
-  .btn-lg { @apply px-5 py-3 text-base rounded-2xl; }
 }
