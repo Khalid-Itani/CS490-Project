@@ -19,7 +19,7 @@ useEffect(() => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto text-gray-900">
-      <h1 className="text-2xl font-bold mb-4">Cover Letter Templates</h1>
+      <h1 className="text-2xl font-bold mb-4 text-gray-900">Cover Letter Templates</h1>
 
       <input
         className="border rounded px-3 py-2 w-full mb-4"

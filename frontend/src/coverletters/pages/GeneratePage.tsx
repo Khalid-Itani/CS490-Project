@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { generateCoverLetter, listTemplates } from '../api/client';
+import { listTemplates } from '../api/client';
 
 export default function GeneratePage() {
   const [templateSlug, setTemplateSlug] = useState('');
@@ -25,8 +25,8 @@ export default function GeneratePage() {
     setLoading(true);
     setOutput('');
     try {
-      const res = await generateCoverLetter({ templateSlug, jobDescription, profileSummary, tone, company });
-      setOutput(res.generated || '');
+      // Placeholder: generation endpoint disabled. Remove this page or wire to modal.
+      setOutput('AI generation is temporarily disabled on this page. Use Template preview to generate.');
     } catch (e: any) {
       alert(e?.message || 'Failed to generate');
     } finally {

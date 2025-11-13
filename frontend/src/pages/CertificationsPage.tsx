@@ -84,91 +84,105 @@ export default function CertificationsPage({ userId }: Props) {
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      {currentUser ? (
-        <div style={{ marginBottom: 16, background: '#f3f4f6', padding: 10, borderRadius: 6 }}>
-          <strong>Logged in as:</strong> {currentUser.email}<br />
-          <strong>User ID:</strong> {currentUser.id}
-        </div>
-      ) : (
-        <div style={{ marginBottom: 16, background: '#fee2e2', color: '#991b1b', padding: 10, borderRadius: 6 }}>
-          <strong>No user info found.</strong> You may not be logged in, or there was an error fetching your user ID.<br />
-          <div style={{ marginTop: 8, fontSize: 13 }}>
-            <strong>Token:</strong> {debugToken ? debugToken : <span style={{ color: '#991b1b' }}>None</span>}<br />
-            <strong>Backend error:</strong> {debugError}
+    <div className="max-w-6xl mx-auto p-6 text-gray-900">
+      {errorMsg && (
+        <div className="mb-3 text-red-600 font-medium">{errorMsg}</div>
+      )}
+      <h2 className="text-gray-900">Certifications</h2>
+      <div className="page-card mt-2 mb-6">
+        <div className="page-card-inner">
+          <h3 className="mb-3 text-gray-900">Add certification</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 items-end">
+            <div>
+              <label className="form-label">Name</label>
+              <input className="input" placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            </div>
+            <div>
+              <label className="form-label">Organization</label>
+              <input className="input" placeholder="Organization" value={form.issuingOrganization} onChange={(e) => setForm({ ...form, issuingOrganization: e.target.value })} onInput={(e) => setOrgQuery((e.target as HTMLInputElement).value)} list="orgOptions" />
+              <datalist id="orgOptions">
+                {orgOptions.map((o) => (<option key={o} value={o} />))}
+              </datalist>
+            </div>
+            <div>
+              <label className="form-label">Date earned</label>
+              <input className="input" type="date" value={form.dateEarned} onChange={(e) => setForm({ ...form, dateEarned: e.target.value })} />
+            </div>
+            {!form.doesNotExpire && (
+              <div>
+                <label className="form-label">Expiration date</label>
+                <input className="input" type="date" value={form.expirationDate} onChange={(e) => setForm({ ...form, expirationDate: e.target.value })} />
+              </div>
+            )}
+            <div className="flex items-center gap-2 h-[42px]">
+              <input className="checkbox" id="no-expire" type="checkbox" checked={form.doesNotExpire} onChange={(e) => setForm({ ...form, doesNotExpire: e.target.checked, expirationDate: '' })} />
+              <label htmlFor="no-expire" className="form-label m-0">Does not expire</label>
+            </div>
+            <div>
+              <label className="form-label">Certification ID</label>
+              <input className="input" placeholder="Certification ID" value={form.certificationNumber} onChange={(e) => setForm({ ...form, certificationNumber: e.target.value })} />
+            </div>
+            <div>
+              <label className="form-label">Category</label>
+              <select className="input" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+                <option value="">Category</option>
+                <option>Cloud</option>
+                <option>Security</option>
+                <option>Data</option>
+                <option>Project Management</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label className="form-label">Renewal reminder (days)</label>
+              <input className="input" type="number" min={0} value={form.renewalReminderDays} onChange={(e) => setForm({ ...form, renewalReminderDays: Number(e.target.value) })} placeholder="Reminder (days)" />
+            </div>
+            <div>
+              <label className="form-label">Document</label>
+              <input className="input" type="file" accept="image/*,application/pdf" onChange={(e) => handleFileInput(e.target.files?.[0] || null)} />
+              {uploadPreview && (
+                <a className="text-sm text-blue-600 hover:underline ml-2" href={uploadPreview} target="_blank" rel="noreferrer">Preview</a>
+              )}
+            </div>
+            <div className="md:col-span-2 lg:col-span-3">
+              <button className="btn btn-primary btn-md" onClick={() => {
+                setErrorMsg(null);
+                if (!currentUserId) {
+                  setErrorMsg('No userId found. Please log in again.');
+                  return;
+                }
+                axios.post(`${API}/certifications`, { ...form, userId: currentUserId })
+                  .then(() => axios.get(`${API}/certifications/user/${currentUserId}`).then((r) => setItems(r.data)))
+                  .catch((err) => {
+                    setErrorMsg(err?.response?.data?.message || 'Failed to add certification. Please check your input and try again.');
+                  });
+              }}>Add</button>
+            </div>
           </div>
         </div>
-      )}
-      {errorMsg && (
-        <div style={{ color: 'red', marginBottom: 10 }}>{errorMsg}</div>
-      )}
-      <h2>Certifications</h2>
-      <div style={{ marginBottom: 20 }}>
-        <h3>Add certification</h3>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-          <input placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-          <input placeholder="Organization" value={form.issuingOrganization} onChange={(e) => setForm({ ...form, issuingOrganization: e.target.value })} onInput={(e) => setOrgQuery((e.target as HTMLInputElement).value)} list="orgOptions" />
-          <datalist id="orgOptions">
-            {orgOptions.map((o) => (<option key={o} value={o} />))}
-          </datalist>
-          <input type="date" value={form.dateEarned} onChange={(e) => setForm({ ...form, dateEarned: e.target.value })} />
-          {!form.doesNotExpire && (
-            <input type="date" value={form.expirationDate} onChange={(e) => setForm({ ...form, expirationDate: e.target.value })} />
-          )}
-          <label style={{ marginRight: 8 }}>
-            <input type="checkbox" checked={form.doesNotExpire} onChange={(e) => setForm({ ...form, doesNotExpire: e.target.checked, expirationDate: '' })} /> Does not expire
-          </label>
-          <input placeholder="Certification ID" value={form.certificationNumber} onChange={(e) => setForm({ ...form, certificationNumber: e.target.value })} />
-          <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
-            <option value="">Category</option>
-            <option>Cloud</option>
-            <option>Security</option>
-            <option>Data</option>
-            <option>Project Management</option>
-            <option>Other</option>
-          </select>
-          <input type="number" min={0} style={{ width: 120 }} value={form.renewalReminderDays} onChange={(e) => setForm({ ...form, renewalReminderDays: Number(e.target.value) })} placeholder="Reminder (days)" />
-          <label style={{ display: 'inline-block' }}>
-            <input type="file" accept="image/*,application/pdf" onChange={(e) => handleFileInput(e.target.files?.[0] || null)} />
-          </label>
-          {uploadPreview && (
-            <a href={uploadPreview} target="_blank" rel="noreferrer">Preview</a>
-          )}
-          <button onClick={() => {
-            setErrorMsg(null);
-            if (!currentUserId) {
-              setErrorMsg('No userId found. Please log in again.');
-              return;
-            }
-            axios.post(`${API}/certifications`, { ...form, userId: currentUserId })
-              .then(() => axios.get(`${API}/certifications/user/${currentUserId}`).then((r) => setItems(r.data)))
-              .catch((err) => {
-                setErrorMsg(err?.response?.data?.message || 'Failed to add certification. Please check your input and try again.');
-              });
-          }}>Add</button>
-        </div>
       </div>
-      <ul>
+      <ul className="space-y-3">
         {sorted.map((c) => {
           const daysLeft = c.doesNotExpire || !c.expirationDate ? null : Math.ceil((new Date(c.expirationDate).getTime() - Date.now()) / (1000*60*60*24));
           const statusColor = c.doesNotExpire ? '#10b981' : daysLeft !== null && daysLeft <= 30 ? '#f59e0b' : '#3b82f6';
           return (
-            <li key={c.id} style={{ marginBottom: 8, border: '1px solid #e5e7eb', borderRadius: 8, padding: 12 }}>
+            <li key={c.id} className="page-card">
+              <div className="page-card-inner">
               {editingId === c.id ? (
                 <div>
-                  <input placeholder="Name" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} />{' '}
-                  <input placeholder="Organization" value={editForm.issuingOrganization} onChange={(e) => setEditForm({ ...editForm, issuingOrganization: e.target.value })} />{' '}
-                  <input type="date" value={editForm.dateEarned?.slice(0,10) ?? ''} onChange={(e) => setEditForm({ ...editForm, dateEarned: e.target.value })} />{' '}
+                  <input className="input mb-2" placeholder="Name" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} />{' '}
+                  <input className="input mb-2" placeholder="Organization" value={editForm.issuingOrganization} onChange={(e) => setEditForm({ ...editForm, issuingOrganization: e.target.value })} />{' '}
+                  <input className="input mb-2" type="date" value={editForm.dateEarned?.slice(0,10) ?? ''} onChange={(e) => setEditForm({ ...editForm, dateEarned: e.target.value })} />{' '}
                   {!editForm.doesNotExpire && (
-                    <input type="date" value={editForm.expirationDate?.slice(0,10) ?? ''} onChange={(e) => setEditForm({ ...editForm, expirationDate: e.target.value })} />
+                    <input className="input mb-2" type="date" value={editForm.expirationDate?.slice(0,10) ?? ''} onChange={(e) => setEditForm({ ...editForm, expirationDate: e.target.value })} />
                   )}{' '}
                   <label>
-                    <input type="checkbox" checked={!!editForm.doesNotExpire} onChange={(e) => setEditForm({ ...editForm, doesNotExpire: e.target.checked, expirationDate: null })} /> Does not expire
+                    <input className="checkbox" type="checkbox" checked={!!editForm.doesNotExpire} onChange={(e) => setEditForm({ ...editForm, doesNotExpire: e.target.checked, expirationDate: null })} /> Does not expire
                   </label>
-                  <input placeholder="Certification ID" value={editForm.certificationNumber ?? ''} onChange={(e) => setEditForm({ ...editForm, certificationNumber: e.target.value })} />
-                  <div style={{ marginTop: 8 }}>
-                    <button onClick={() => { axios.put(`${API}/certifications/${c.id}`, editForm).then(() => { setEditingId(null); setEditForm(null); axios.get(`${API}/certifications/user/1`).then((r) => setItems(r.data)); }); }}>Save</button>{' '}
-                    <button onClick={() => { setEditingId(null); setEditForm(null); }}>Cancel</button>
+                  <input className="input mb-2" placeholder="Certification ID" value={editForm.certificationNumber ?? ''} onChange={(e) => setEditForm({ ...editForm, certificationNumber: e.target.value })} />
+                  <div className="mt-2 space-x-2">
+                    <button className="btn btn-primary btn-sm" onClick={() => { axios.put(`${API}/certifications/${c.id}`, editForm).then(() => { setEditingId(null); setEditForm(null); axios.get(`${API}/certifications/user/1`).then((r) => setItems(r.data)); }); }}>Save</button>{' '}
+                    <button className="btn btn-secondary btn-sm" onClick={() => { setEditingId(null); setEditForm(null); }}>Cancel</button>
                   </div>
                 </div>
               ) : (
@@ -176,21 +190,21 @@ export default function CertificationsPage({ userId }: Props) {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <div>
                       <strong>{c.name}</strong> — {c.issuingOrganization}
-                      <div style={{ color: '#6b7280' }}>Earned: {c.dateEarned?.slice(0,10)} {c.doesNotExpire ? '(Does not expire)' : c.expirationDate ? `- Expires ${c.expirationDate?.slice(0,10)}` : ''}</div>
+                      <div className="text-gray-600">Earned: {c.dateEarned?.slice(0,10)} {c.doesNotExpire ? '(Does not expire)' : c.expirationDate ? `- Expires ${c.expirationDate?.slice(0,10)}` : ''}</div>
                       {c.certificationNumber && <div>ID: {c.certificationNumber}</div>}
                       {c.category && <div>Category: {c.category}</div>}
-                      {c.documentUrl && <div><a href={c.documentUrl} target="_blank">View document</a></div>}
-                      <div style={{ marginTop: 6 }}>
+                      {c.documentUrl && <div><a className="text-blue-600 hover:underline" href={c.documentUrl} target="_blank">View document</a></div>}
+                      <div className="mt-2">
                         <span style={{ background: statusColor, color: '#fff', padding: '2px 8px', borderRadius: 999 }}>{c.doesNotExpire ? 'Permanent' : daysLeft !== null ? `${daysLeft} days left` : 'No expiration set'}</span>
                         <span style={{ marginLeft: 8, background: '#111827', color: '#fff', padding: '2px 8px', borderRadius: 999 }}>Verification: {c.verificationStatus ?? 'Unverified'}</span>
                       </div>
                     </div>
                     <div>
-                      <button onClick={() => { setEditingId(c.id); setEditForm({ ...c }); }}>Edit</button>
+                      <button className="btn btn-secondary btn-sm" onClick={() => { setEditingId(c.id); setEditForm({ ...c }); }}>Edit</button>
                     </div>
                   </div>
-                  <div style={{ marginTop: 6 }}>
-                    <button onClick={() => {
+                  <div className="mt-2">
+                    <button className="btn btn-ghost btn-sm" onClick={() => {
                       if (!confirm('Delete this certification?')) return;
                       if (!currentUserId) return;
                       axios.delete(`${API}/certifications/${c.id}`).then(() => axios.get(`${API}/certifications/user/${currentUserId}`).then((r) => setItems(r.data)));
@@ -198,6 +212,7 @@ export default function CertificationsPage({ userId }: Props) {
                   </div>
                 </div>
               )}
+              </div>
             </li>
           );
         })}
