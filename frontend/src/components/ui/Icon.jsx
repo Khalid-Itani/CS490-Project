@@ -66,6 +66,14 @@ const iconMap = {
   document: HiIcons.HiDocument,
   folder: HiIcons.HiFolder,
 
+  // Contact & Networking
+  bookmark: HiIcons.HiBookmark,
+  'external-link': HiIcons.HiExternalLink,
+  'user-plus': HiIcons.HiUserAdd,
+  trash: HiIcons.HiTrash,
+  check: HiIcons.HiCheck,
+  loader: AiIcons.AiOutlineLoading3Quarters,
+
   // Application Specific (keep these only once)
   job: BiIcons.BiBriefcase,
   company: BiIcons.BiBuildings,

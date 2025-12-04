@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ProfileController } from './profile.controller';
-import { SupabaseService } from '../supabase/supabase.service';
+import { SupabaseModule } from '../supabase/supabase.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+  imports: [SupabaseModule, AuthModule],
   controllers: [ProfileController],
-  providers: [SupabaseService],
 })
 export class ProfileModule {}

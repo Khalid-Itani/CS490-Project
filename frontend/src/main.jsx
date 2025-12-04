@@ -54,6 +54,12 @@ import GoalsDashboard from './pages/Goals/GoalsDashboard';
 import MarketIntelligence from './pages/MarketIntelligence';
 import CompetitiveAnalysis from './pages/Prepare/CompetitiveAnalysis';
 import ProductivityAnalytics from './pages/Jobs/ProductivityAnalytics';
+import ProfessionalContacts from './pages/ProfessionalContacts';
+import NetworkingEvents from './pages/NetworkingEvents';
+import InformationalInterviews from './pages/InformationalInterviews';
+import ContactDiscovery from './pages/ContactDiscovery';
+import Mentors from './pages/Mentors';
+import MentorDashboard from './pages/MentorDashboard';
 
 import './index.css';
 import './styles/globals.css';
@@ -118,6 +124,13 @@ const router = createBrowserRouter([
       { path: '/market-intelligence', element: <MarketIntelligence /> },
       { path: '/prepare/competitive-analysis', element: <CompetitiveAnalysis /> },
       { path: '/productivity-tracker', element: <ProductivityAnalytics /> },
+      { path: '/contacts', element: <ProfessionalContacts /> },
+      { path: '/networking-events', element: <NetworkingEvents /> },
+      { path: '/informational-interviews', element: <InformationalInterviews /> },
+      { path: '/contact-discovery', element: <ContactDiscovery /> },
+      { path: '/mentors', element: <Mentors /> },
+      { path: '/mentor-dashboard', element: <MentorDashboard /> },
+      { path: '/mentor-dashboard/:menteeId', element: <MentorDashboard /> },
 
       // ✅ New Cover Letter Templates route
       {

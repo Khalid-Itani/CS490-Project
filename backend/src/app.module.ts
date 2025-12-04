@@ -24,6 +24,11 @@ import { GoalsModule } from './goals/goals.module';
 import { MarketModule } from './market/market.module';
 import { CompetitiveModule } from './competitive/competitive.module';
 import { ProductivityModule } from './productivity/productivity.module';
+import { ContactsModule } from './contacts/contacts.module';
+import { NetworkingModule } from './networking/networking.module';
+import { InformationalInterviewsModule } from './informational-interviews/informational-interviews.module';
+import { ContactDiscoveryModule } from './contact-discovery/contact-discovery.module';
+import { MentorModule } from './mentor/mentor.module';
 
 @Module({
   imports: [
@@ -52,7 +57,12 @@ import { ProductivityModule } from './productivity/productivity.module';
   GoalsModule,
   MarketModule,
   CompetitiveModule,
-  ProductivityModule
+  ProductivityModule,
+  ContactsModule,
+  NetworkingModule,
+  InformationalInterviewsModule,
+  ContactDiscoveryModule,
+  MentorModule
   ],
   controllers: [AppController],
   providers: [AppService],

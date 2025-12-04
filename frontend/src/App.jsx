@@ -25,6 +25,7 @@ import CertificationsPage from "./pages/CertificationsPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ProfileForm from "./components/ProfileForm";
 import ProfileSummary from "./components/ProfileSummary";
+import ContactDiscovery from "./pages/ContactDiscovery";
 
 const TemplatesPage = React.lazy(() =>
   import("./coverletters/pages/TemplatesPage")
@@ -65,6 +66,9 @@ export default function App() {
         <Route path="/profile/edit" element={<ProfileForm />} />
         <Route path="/profile/summary" element={<ProfileSummary />} />
         <Route path="/delete-account" element={<DeleteAccount />} />
+
+        {/* Networking */}
+        <Route path="/contact-discovery" element={<ContactDiscovery />} />
 
         <Route
           path="/coverletters/templates"

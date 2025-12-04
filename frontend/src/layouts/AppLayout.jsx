@@ -55,7 +55,9 @@ function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false); // Profile dropdown
   const [jobsOpen, setJobsOpen] = useState(false); // Jobs dropdown
   const [prepareOpen, setPrepareOpen] = useState(false); // Prepare dropdown
+  const [profilePicture, setProfilePicture] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => setOpen(false), [location.pathname]);
 
@@ -68,6 +70,49 @@ function Navbar() {
       return () => window.removeEventListener("keydown", onKey);
     }
   }, [open]);
+
+  // Fetch profile picture
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        
+        const response = await fetch('http://localhost:3000/profile/me', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setProfilePicture(data.profilePicture);
+        }
+      } catch (error) {
+        console.error('Failed to fetch profile picture:', error);
+      }
+    };
+    
+    fetchProfilePicture();
+    
+    // Refresh profile picture when navigating to/from profile page
+    if (location.pathname === '/profile') {
+      fetchProfilePicture();
+    }
+  }, [location.pathname]);
+
+  // Listen for profile picture updates
+  useEffect(() => {
+    const handleProfilePictureUpdate = (event) => {
+      if (event.detail?.url) {
+        setProfilePicture(event.detail.url);
+      }
+    };
+
+    window.addEventListener('profilePictureUpdated', handleProfilePictureUpdate);
+    
+    return () => {
+      window.removeEventListener('profilePictureUpdated', handleProfilePictureUpdate);
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur">
@@ -156,6 +201,12 @@ function Navbar() {
                     <Link to="/projects" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Projects</Link>
                     <Link to="/skills" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Skills</Link>
                     <Link to="/employment" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Employment</Link>
+                    <Link to="/contacts" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Professional Contacts</Link>
+                    <Link to="/networking-events" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Networking Events</Link>
+                    <Link to="/informational-interviews" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Informational Interviews</Link>
+                    <Link to="/mentors" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Mentors & Coaches</Link>
+                    <div className="border-t border-gray-200 my-1"></div>
+                    <Link to="/mentor-dashboard" className="block px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 font-medium">Mentor Dashboard</Link>
                   </div>
                 )}
               </div>
@@ -231,6 +282,7 @@ function Navbar() {
                     <Link to="/job-match" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Job Match</Link>
                     <Link to="/market-intelligence" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Market Intelligence</Link>
                     <Link to="/prepare/competitive-analysis" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Competitive Analysis</Link>
+                    <Link to="/contact-discovery" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Contact Discovery</Link>
                   </div>
                 )}
               </div>
@@ -238,7 +290,26 @@ function Navbar() {
           </div>
 
           {/* Right side */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-3">
+            {/* Profile Picture */}
+            <button
+              onClick={() => navigate('/profile')}
+              className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-gray-200 hover:border-blue-500 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500"
+              title="Go to Profile"
+            >
+              {profilePicture ? (
+                <img
+                  src={profilePicture}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <Icon name="user" size="sm" className="text-gray-500" />
+                </div>
+              )}
+            </button>
+            
             <button
               onClick={() => {
                 fetch("/api/auth/logout", { method: "POST", credentials: "include" })
@@ -316,6 +387,11 @@ function Navbar() {
                   <Link to="/projects" className="py-1 text-sm text-gray-700 hover:underline">Projects</Link>
                   <Link to="/skills" className="py-1 text-sm text-gray-700 hover:underline">Skills</Link>
                   <Link to="/employment" className="py-1 text-sm text-gray-700 hover:underline">Employment</Link>
+                  <Link to="/contacts" className="py-1 text-sm text-gray-700 hover:underline">Professional Contacts</Link>
+                  <Link to="/networking-events" className="py-1 text-sm text-gray-700 hover:underline">Networking Events</Link>
+                  <Link to="/informational-interviews" className="py-1 text-sm text-gray-700 hover:underline">Informational Interviews</Link>
+                  <Link to="/mentors" className="py-1 text-sm text-gray-700 hover:underline">Mentors & Coaches</Link>
+                  <Link to="/mentor-dashboard" className="py-1 text-sm text-blue-600 hover:underline font-medium">Mentor Dashboard</Link>
                 </div>
               </details>
 
@@ -349,17 +425,42 @@ function Navbar() {
                   <Link to="/job-match" className="py-1 text-sm text-gray-700 hover:underline">Job Match</Link>
                   <Link to="/market-intelligence" className="py-1 text-sm text-gray-700 hover:underline">Market Intelligence</Link>
                   <Link to="/prepare/competitive-analysis" className="py-1 text-sm text-gray-700 hover:underline">Competitive Analysis</Link>
+                  <Link to="/contact-discovery" className="py-1 text-sm text-gray-700 hover:underline">Contact Discovery</Link>
                 </div>
               </details>
             </nav>
 
-            <div className="mt-2">
+            <div className="mt-2 flex flex-col gap-2">
+              {/* Profile Picture - Mobile */}
+              <button
+                onClick={() => {
+                  navigate('/profile');
+                  setOpen(false);
+                }}
+                className="w-full px-3 py-2 rounded-xl text-sm bg-white border border-gray-200 hover:bg-gray-50 flex items-center gap-3"
+              >
+                <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-gray-200">
+                  {profilePicture ? (
+                    <img
+                      src={profilePicture}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                      <Icon name="user" size="sm" className="text-gray-500" />
+                    </div>
+                  )}
+                </div>
+                <span className="text-gray-700">View Profile</span>
+              </button>
+              
               <button
                 onClick={() => {
                   fetch("/api/auth/logout", { method: "POST", credentials: "include" })
                     .then(() => (window.location.href = "/login"));
                 }}
-                className="px-3 py-2 rounded-xl text-sm bg-gray-900 text-white hover:opacity-90 flex items-center justify-center gap-2"
+                className="w-full px-3 py-2 rounded-xl text-sm bg-gray-900 text-white hover:opacity-90 flex items-center gap-2 justify-center"
               >
                 <Icon name="logout" size="sm" variant="white" />
                 <span>Logout</span>
