@@ -8,50 +8,12 @@ export class InformationalInterviewsService {
   async createInterview(userId: string, interviewData: any) {
     const supabase = this.supabaseService.getClient();
     
-    // Get contact from network_contacts and ensure it exists in professional_contacts
-    let contactIdToUse = null;
-    if (interviewData.contactId) {
-      const { data: networkContact } = await supabase
-        .from('network_contacts')
-        .select('*')
-        .eq('id', interviewData.contactId)
-        .single();
-      
-      if (networkContact) {
-        // Check if already exists in professional_contacts
-        const { data: existingProf } = await supabase
-          .from('professional_contacts')
-          .select('id')
-          .eq('id', networkContact.id)
-          .single();
-        
-        if (!existingProf) {
-          // Copy to professional_contacts with same ID to satisfy FK
-          await supabase
-            .from('professional_contacts')
-            .insert({
-              id: networkContact.id,
-              user_id: userId,
-              name: networkContact.contact_name,
-              email: networkContact.email_address,
-              phone: networkContact.phone_number,
-              company: networkContact.company,
-              job_title: networkContact.job_title,
-              relationship_strength: networkContact.relationship_strength || 3,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-            });
-        }
-        contactIdToUse = networkContact.id;
-      }
-    }
-    
-    // Insert using only actual columns in informational_interviews table
+    // Insert using actual columns in informational_interviews table
     const { data, error } = await supabase
       .from('informational_interviews')
       .insert({
         user_id: userId,
-        contact_id: contactIdToUse,
+        contact_id: interviewData.contactId,
         request_status: interviewData.requestStatus || 'requested',
         scheduled_time: interviewData.scheduledTime || null,
         prep_notes: interviewData.prepNotes || null,
@@ -59,18 +21,31 @@ export class InformationalInterviewsService {
       })
       .select(`
         *,
-        professional_contacts (
+        network_contacts (
           id,
-          name,
+          contact_name,
           job_title,
           company,
-          email,
-          phone
+          email_address,
+          phone_number
         )
       `)
       .single();
 
     if (error) throw error;
+    
+    // Map network_contacts to professional_contacts format for frontend compatibility
+    if (data && data.network_contacts) {
+      data.professional_contacts = {
+        id: data.network_contacts.id,
+        name: data.network_contacts.contact_name,
+        job_title: data.network_contacts.job_title,
+        company: data.network_contacts.company,
+        email: data.network_contacts.email_address,
+        phone: data.network_contacts.phone_number,
+      };
+    }
+    
     return data;
   }
 
@@ -81,13 +56,13 @@ export class InformationalInterviewsService {
       .from('informational_interviews')
       .select(`
         *,
-        professional_contacts (
+        network_contacts (
           id,
-          name,
+          contact_name,
           job_title,
           company,
-          email,
-          phone
+          email_address,
+          phone_number
         )
       `)
       .eq('user_id', userId)
@@ -99,7 +74,19 @@ export class InformationalInterviewsService {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    
+    // Map network_contacts to professional_contacts format for frontend compatibility
+    return data?.map(interview => ({
+      ...interview,
+      professional_contacts: interview.network_contacts ? {
+        id: interview.network_contacts.id,
+        name: interview.network_contacts.contact_name,
+        job_title: interview.network_contacts.job_title,
+        company: interview.network_contacts.company,
+        email: interview.network_contacts.email_address,
+        phone: interview.network_contacts.phone_number,
+      } : null
+    })) || [];
   }
 
   async getInterviewById(userId: string, interviewId: string) {
@@ -109,13 +96,13 @@ export class InformationalInterviewsService {
       .from('informational_interviews')
       .select(`
         *,
-        professional_contacts (
+        network_contacts (
           id,
-          name,
+          contact_name,
           job_title,
           company,
-          email,
-          phone
+          email_address,
+          phone_number
         )
       `)
       .eq('id', interviewId)
@@ -123,6 +110,19 @@ export class InformationalInterviewsService {
       .single();
 
     if (error) throw error;
+    
+    // Map network_contacts to professional_contacts format for frontend compatibility
+    if (data && data.network_contacts) {
+      data.professional_contacts = {
+        id: data.network_contacts.id,
+        name: data.network_contacts.contact_name,
+        job_title: data.network_contacts.job_title,
+        company: data.network_contacts.company,
+        email: data.network_contacts.email_address,
+        phone: data.network_contacts.phone_number,
+      };
+    }
+    
     return data;
   }
 
@@ -180,7 +180,7 @@ export class InformationalInterviewsService {
       .from('informational_interviews')
       .select(`
         *,
-        professional_contacts (company)
+        network_contacts (company)
       `)
       .eq('user_id', userId);
 
@@ -211,7 +211,7 @@ export class InformationalInterviewsService {
           break;
       }
 
-      const company = interview.professional_contacts?.company;
+      const company = interview.network_contacts?.company;
       if (company) {
         stats.byCompany[company] = (stats.byCompany[company] || 0) + 1;
       }

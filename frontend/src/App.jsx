@@ -27,6 +27,13 @@ import ProfileForm from "./components/ProfileForm";
 import ProfileSummary from "./components/ProfileSummary";
 import ContactDiscovery from "./pages/ContactDiscovery";
 
+// Networking Pages
+import ContactsPage from "./pages/networking/ContactsPage";
+import ContactDetailPage from "./pages/networking/ContactDetailPage";
+import EventsPage from "./pages/networking/EventsPage";
+import InformationalInterviewsPage from "./pages/networking/InformationalInterviewsPage";
+import MaintenancePage from "./pages/networking/MaintenancePage";
+
 const TemplatesPage = React.lazy(() =>
   import("./coverletters/pages/TemplatesPage")
 );

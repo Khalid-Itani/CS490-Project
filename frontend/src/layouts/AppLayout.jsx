@@ -50,6 +50,48 @@ function Breadcrumbs() {
   );
 }
 
+function NetworkingDropdown() {
+  const [networkingOpen, setNetworkingOpen] = useState(false);
+  
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setNetworkingOpen((v) => !v)}
+        className={classNames(
+          "px-3 py-2 rounded-xl text-sm flex items-center gap-2 transition",
+          networkingOpen ? "bg-gray-900 text-white" : "text-gray-700 hover:bg-gray-100"
+        )}
+      >
+        <Icon name="user" size="sm" />
+        <span>Networking</span>
+        <svg
+          className={classNames(
+            "h-3 w-3 transition-transform",
+            networkingOpen ? "rotate-180" : ""
+          )}
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {networkingOpen && (
+        <div className="absolute top-full mt-1 left-0 w-64 bg-white border border-gray-200 rounded-lg shadow-md py-2 z-50">
+          <Link to="/contacts" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Professional Contacts</Link>
+          <Link to="/networking-events" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Networking Events</Link>
+          <Link to="/informational-interviews" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Informational Interviews</Link>
+          <Link to="/mentors" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Mentors & Coaches</Link>
+          <div className="border-t border-gray-200 my-1"></div>
+          <Link to="/mentor-dashboard" className="block px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 font-medium">Mentor Dashboard</Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false); // Profile dropdown
@@ -201,12 +243,6 @@ function Navbar() {
                     <Link to="/projects" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Projects</Link>
                     <Link to="/skills" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Skills</Link>
                     <Link to="/employment" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Employment</Link>
-                    <Link to="/contacts" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Professional Contacts</Link>
-                    <Link to="/networking-events" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Networking Events</Link>
-                    <Link to="/informational-interviews" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Informational Interviews</Link>
-                    <Link to="/mentors" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Mentors & Coaches</Link>
-                    <div className="border-t border-gray-200 my-1"></div>
-                    <Link to="/mentor-dashboard" className="block px-3 py-1.5 text-sm text-blue-600 hover:bg-blue-50 font-medium">Mentor Dashboard</Link>
                   </div>
                 )}
               </div>
@@ -242,6 +278,8 @@ function Navbar() {
                     <Link to="/jobs/calendar" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Calendar</Link>
                     <Link to="/application-success" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Application Analytics</Link>
                     <Link to="/productivity-tracker" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Productivity Tracker</Link>
+                    <Link to="/network-analytics" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Network Analytics</Link>
+                    <Link to="/success-patterns" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Success Patterns</Link>
                     <Link to="/resumes" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Resumes</Link>
                     <Link to="/coverletters/templates" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Cover Letters</Link>
                   </div>
@@ -276,16 +314,19 @@ function Navbar() {
                 {prepareOpen && (
                   <div className="absolute top-full mt-1 left-0 w-56 bg-white border border-gray-200 rounded-lg shadow-md py-2 z-50">
                     <Link to="/research" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Company Research</Link>
-                    <Link to="/salary-analysis" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Salary Analysis</Link>
-                    <Link to="/resumes/interview-insights" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Interview Insights</Link>
-                    <Link to="/interview-performance" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Performance Analytics</Link>
-                    <Link to="/job-match" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Job Match</Link>
                     <Link to="/market-intelligence" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Market Intelligence</Link>
+                    <Link to="/job-match" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Job Match</Link>
+                    <Link to="/resumes/interview-insights" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Interview Insights</Link>
+                    <Link to="/salary-analysis" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Salary Analysis</Link>
+                    <Link to="/interview-performance" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Performance Analytics</Link>
                     <Link to="/prepare/competitive-analysis" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Competitive Analysis</Link>
                     <Link to="/contact-discovery" className="block px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-100">Contact Discovery</Link>
                   </div>
                 )}
               </div>
+
+              {/* Networking Dropdown */}
+              <NetworkingDropdown />
             </nav>
           </div>
 
@@ -387,6 +428,16 @@ function Navbar() {
                   <Link to="/projects" className="py-1 text-sm text-gray-700 hover:underline">Projects</Link>
                   <Link to="/skills" className="py-1 text-sm text-gray-700 hover:underline">Skills</Link>
                   <Link to="/employment" className="py-1 text-sm text-gray-700 hover:underline">Employment</Link>
+                </div>
+              </details>
+
+              {/* Networking Collapsible menu */}
+              <details>
+                <summary className="px-3 py-2 rounded-xl text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2 cursor-pointer">
+                  <Icon name="user" size="sm" />
+                  <span>Networking</span>
+                </summary>
+                <div className="pl-6 flex flex-col">
                   <Link to="/contacts" className="py-1 text-sm text-gray-700 hover:underline">Professional Contacts</Link>
                   <Link to="/networking-events" className="py-1 text-sm text-gray-700 hover:underline">Networking Events</Link>
                   <Link to="/informational-interviews" className="py-1 text-sm text-gray-700 hover:underline">Informational Interviews</Link>
@@ -406,6 +457,8 @@ function Navbar() {
                   <Link to="/jobs/calendar" className="py-1 text-sm text-gray-700 hover:underline">Calendar</Link>
                   <Link to="/application-success" className="py-1 text-sm text-gray-700 hover:underline">Application Analytics</Link>
                   <Link to="/productivity-tracker" className="py-1 text-sm text-gray-700 hover:underline">Productivity Tracker</Link>
+                  <Link to="/network-analytics" className="py-1 text-sm text-gray-700 hover:underline">Network Analytics</Link>
+                  <Link to="/success-patterns" className="py-1 text-sm text-gray-700 hover:underline">Success Patterns</Link>
                   <Link to="/resumes" className="py-1 text-sm text-gray-700 hover:underline">Resumes</Link>
                   <Link to="/coverletters/templates" className="py-1 text-sm text-gray-700 hover:underline">Cover Letters</Link>
                 </div>
@@ -419,11 +472,11 @@ function Navbar() {
                 </summary>
                 <div className="pl-6 flex flex-col">
                   <Link to="/research" className="py-1 text-sm text-gray-700 hover:underline">Company Research</Link>
-                  <Link to="/salary-analysis" className="py-1 text-sm text-gray-700 hover:underline">Salary Analysis</Link>
-                  <Link to="/resumes/interview-insights" className="py-1 text-sm text-gray-700 hover:underline">Interview Insights</Link>
-                  <Link to="/interview-performance" className="py-1 text-sm text-gray-700 hover:underline">Performance Analytics</Link>
-                  <Link to="/job-match" className="py-1 text-sm text-gray-700 hover:underline">Job Match</Link>
                   <Link to="/market-intelligence" className="py-1 text-sm text-gray-700 hover:underline">Market Intelligence</Link>
+                  <Link to="/job-match" className="py-1 text-sm text-gray-700 hover:underline">Job Match</Link>
+                  <Link to="/resumes/interview-insights" className="py-1 text-sm text-gray-700 hover:underline">Interview Insights</Link>
+                  <Link to="/salary-analysis" className="py-1 text-sm text-gray-700 hover:underline">Salary Analysis</Link>
+                  <Link to="/interview-performance" className="py-1 text-sm text-gray-700 hover:underline">Performance Analytics</Link>
                   <Link to="/prepare/competitive-analysis" className="py-1 text-sm text-gray-700 hover:underline">Competitive Analysis</Link>
                   <Link to="/contact-discovery" className="py-1 text-sm text-gray-700 hover:underline">Contact Discovery</Link>
                 </div>

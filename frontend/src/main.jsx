@@ -132,7 +132,8 @@ const router = createBrowserRouter([
       { path: '/mentor-dashboard', element: <MentorDashboard /> },
       { path: '/mentor-dashboard/:menteeId', element: <MentorDashboard /> },
 
-      // ✅ New Cover Letter Templates route
+
+      //New Cover Letter Templates route
       {
         path: '/coverletters',
         element: (
@@ -152,6 +153,8 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+
+
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

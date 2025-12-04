@@ -26,7 +26,6 @@ import { CompetitiveModule } from './competitive/competitive.module';
 import { ProductivityModule } from './productivity/productivity.module';
 import { ContactsModule } from './contacts/contacts.module';
 import { NetworkingModule } from './networking/networking.module';
-import { InformationalInterviewsModule } from './informational-interviews/informational-interviews.module';
 import { ContactDiscoveryModule } from './contact-discovery/contact-discovery.module';
 import { MentorModule } from './mentor/mentor.module';
 
@@ -60,9 +59,8 @@ import { MentorModule } from './mentor/mentor.module';
   ProductivityModule,
   ContactsModule,
   NetworkingModule,
-  InformationalInterviewsModule,
   ContactDiscoveryModule,
-  MentorModule
+  MentorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

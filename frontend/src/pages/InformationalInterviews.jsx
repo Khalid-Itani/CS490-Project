@@ -243,8 +243,8 @@ const InformationalInterviews = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Informational Interviews</h1>
-          <p className="text-gray-600">Request and manage informational interviews with your network contacts</p>
+          <h1 className="text-3xl font-bold text-black">Informational Interviews</h1>
+          <p className="text-black">Request and manage informational interviews with your network contacts</p>
         </div>
         <button
           onClick={() => {
