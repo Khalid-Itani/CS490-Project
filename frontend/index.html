@@ -4,14 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/propel-logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Propel</title>
+    <title>Propel - Job Search & Career Management Platform</title>
+    <meta name="description" content="Propel helps job seekers manage applications, create resumes, track interviews, and optimize their job search with AI-powered tools and analytics." />
+    
+    <!-- Preload critical logo image -->
+    <link rel="preload" href="/propel-logo.png" as="image" type="image/png">
 
-    <!-- Fast font loading + fallbacks -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <!-- Inter = primary/body; Poppins = headings/emphasis -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Async font loading (non-blocking) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet"></noscript>
+    
+    <!-- Inline critical CSS to eliminate render blocking -->
+    <style>
+      body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:#fff}
+      .landing{background:#fff;color:#111827}
+      .lp-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid #e5e7eb;background:#fff;box-shadow:0 1px 6px rgba(16,24,40,0.04);max-width:1100px;margin:0 auto}
+      .lp-logo{width:40px;height:40px;border-radius:12px}
+      .btn{padding:10px 16px;border-radius:999px;font-size:1rem;font-weight:700;border:1px solid transparent;cursor:pointer;text-decoration:none;display:inline-block}
+      .btn--primary{background:#1e3a8a;color:#fff;border-color:#1e3a8a}
+    </style>
   </head>
   <body>
     <div id="root"></div>

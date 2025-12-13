@@ -7,7 +7,7 @@ export default function Landing() {
       {/* Top Nav */}
       <header className="lp-header container">
         <div className="lp-brand">
-          <img src="/propel-logo.png" alt="Propel Logo" className="lp-logo" />
+          <img src="/propel-logo.png" alt="Propel Logo" className="lp-logo" width="40" height="40" loading="eager" />
           <span className="lp-wordmark" aria-hidden>Propel</span>
         </div>
         <nav className="lp-nav">
@@ -38,6 +38,7 @@ export default function Landing() {
 
         {/* Features (minimal, clean) */}
         <section className="features container">
+          <h2 className="sr-only">Key Features</h2>
           <div className="feature">
             <div className="feature-icon" aria-hidden>🚀</div>
             <h3>Fast Onboarding</h3>

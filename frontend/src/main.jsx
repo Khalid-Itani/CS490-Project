@@ -89,10 +89,12 @@ import './index.css';
 import './styles/globals.css';
 import './styles/theme.css';
 
+// Lazy load pages for better performance (UC-134)
 const TemplatesPage = lazy(() => import('./coverletters/pages/TemplatesPage'));
 const GeneratePage = lazy(() => import('./coverletters/pages/GeneratePage'));
 const SavedCoverLettersPage = lazy(() => import('./coverletters/pages/SavedCoverLettersPage'));
 const EditCoverLetterPage = lazy(() => import('./coverletters/pages/EditCoverLetterPage'));
+const PerformanceMonitoring = lazy(() => import('./pages/PerformanceMonitoring'));
 
 // UC-014 color system tokens
 // import "./CS490/UC-014/styles/colors.css";
@@ -137,6 +139,16 @@ const router = createBrowserRouter([
       { path: '/employment', element: <EmploymentHistoryPage /> },
       { path: '/cards', element: <CardPreview /> },
       { path: '/typography', element: <TypographyPreview /> },
+      
+      {
+        path: '/performance',
+        element: (
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
+            <PerformanceMonitoring />
+          </Suspense>
+        )
+      },
+      
       { path: '/resumes', element: <ResumeDashboard /> },
       { path: '/resumes/templates', element: <TemplateManager /> },
       { path: '/resumes/ai', element: <AIResumeGenerator /> },
