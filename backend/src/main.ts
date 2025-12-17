@@ -2,12 +2,29 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
+import { initializeSentry, getSentryRequestHandler, getSentryErrorHandler } from './monitoring/sentry.init';
+import { MetricsInterceptor } from './monitoring/metrics.interceptor';
+import { MonitoringLogger } from './monitoring/logger.service';
+import { MetricsService } from './monitoring/metrics.service';
 
 console.log('Loaded SUPABASE_URL:', process.env.SUPABASE_URL);
 
 async function bootstrap() {
+  // Initialize Sentry before creating the app
+  initializeSentry();
+
   const app = await NestFactory.create(AppModule);
   
+  // Get monitoring services
+  const metricsService = app.get(MetricsService);
+  const monitoringLogger = app.get(MonitoringLogger);
+
+  // Add Sentry request handler middleware
+  app.use(getSentryRequestHandler());
+
+  // Add metrics interceptor globally
+  app.useGlobalInterceptors(new MetricsInterceptor(metricsService, monitoringLogger));
+
   app.enableCors({
     origin: 'http://localhost:5173',
     credentials: true,
@@ -27,7 +44,16 @@ async function bootstrap() {
       cookie: { secure: false }, // set to true if using HTTPS
     }),
   );
+
+  // Add Sentry error handler middleware
+  app.use(getSentryErrorHandler());
+
+  monitoringLogger.log('Application starting', { port: 3000 });
   await app.listen(3000);
+  monitoringLogger.log('Application started successfully', { port: 3000 });
 }
 
-bootstrap();
+bootstrap().catch(error => {
+  console.error('Failed to start application:', error);
+  process.exit(1);
+});

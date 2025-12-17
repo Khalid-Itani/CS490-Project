@@ -41,6 +41,7 @@ import { ApplicationQualityModule } from './application-quality/application-qual
 import { ExternalCertificationsModule } from './external-certifications/external-certifications.module';
 import { EmailIntegrationModule } from './email-integration/email-integration.module';
 import { TimingOptimizerModule } from './timing-optimizer/timing-optimizer.module';
+import { MonitoringModule } from './monitoring/monitoring.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { TimingOptimizerModule } from './timing-optimizer/timing-optimizer.modul
       isGlobal: true,
       envFilePath: ['.env'], // ensures backend/.env is loaded
     }),
+    MonitoringModule,
     SupabaseModule,
     AuthModule,
     ApplicationsModule,
