@@ -25,22 +25,49 @@ async function bootstrap() {
   app.useGlobalInterceptors(new MetricsInterceptor(metricsService, monitoringLogger));
 
   app.enableCors({
-    origin: 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Allow server-to-server or curl (no origin)
+      if (!origin) return callback(null, true);
+
+      // Allow all Vercel preview + prod domains
+      if (origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+
+      // Allow local dev
+      if (origin === 'http://localhost:5173' || origin === 'http://localhost:3000') {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
+  
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
+      whitelist: true, // Strip properties not in DTO
       forbidNonWhitelisted: false,
       transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
+  
   app.use(
     session({
       secret: process.env.JWT_SECRET || 'your-session-secret',
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: false }, // set to true if using HTTPS
+      cookie: { 
+        secure: false, // set to true if using HTTPS in production
+        httpOnly: true, // Prevent XSS access to session cookie
+        sameSite: 'strict', // CSRF protection
+        maxAge: 1000 * 60 * 60 * 24, // 24 hours
+      },
     }),
   );
 
