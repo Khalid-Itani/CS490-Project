@@ -1,4 +1,5 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import * as Sentry from '@sentry/nestjs';
 import { MetricsService } from './metrics.service';
 import { MonitoringLogger } from './logger.service';
 
@@ -98,5 +99,14 @@ export class MonitoringController {
       uptime: process.uptime(),
       memory: process.memoryUsage(),
     };
+  }
+
+  /**
+   * Sentry test endpoint: captures a message and throws an error
+   */
+  @Get('sentry-test')
+  sentryTest() {
+    Sentry.captureMessage('Sentry test message from /monitoring/sentry-test');
+    throw new Error('Sentry test error from /monitoring/sentry-test');
   }
 }

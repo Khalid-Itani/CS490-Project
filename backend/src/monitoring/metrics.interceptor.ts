@@ -19,7 +19,7 @@ export class MetricsInterceptor implements NestInterceptor {
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const request = context.getRequest();
+    const request = context.switchToHttp().getRequest();
     const { method, url, user } = request;
     const endpoint = this.sanitizeUrl(url);
     const startTime = Date.now();

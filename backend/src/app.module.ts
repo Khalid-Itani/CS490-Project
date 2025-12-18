@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { SentryModule } from '@sentry/nestjs/setup';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -49,6 +50,7 @@ import { MonitoringModule } from './monitoring/monitoring.module';
       isGlobal: true,
       envFilePath: ['.env'], // ensures backend/.env is loaded
     }),
+    SentryModule.forRoot(),
     MonitoringModule,
     SupabaseModule,
     AuthModule,

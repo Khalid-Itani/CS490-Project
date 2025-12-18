@@ -1,8 +1,9 @@
+import "./instrument";
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
-import { initializeSentry, getSentryRequestHandler, getSentryErrorHandler } from './monitoring/sentry.init';
+// Sentry is initialized in instrument.ts; custom init/middleware removed to avoid duplication
 import { MetricsInterceptor } from './monitoring/metrics.interceptor';
 import { MonitoringLogger } from './monitoring/logger.service';
 import { MetricsService } from './monitoring/metrics.service';
@@ -10,8 +11,7 @@ import { MetricsService } from './monitoring/metrics.service';
 console.log('Loaded SUPABASE_URL:', process.env.SUPABASE_URL);
 
 async function bootstrap() {
-  // Initialize Sentry before creating the app
-  initializeSentry();
+  // Sentry already initialized in instrument.ts
 
   const app = await NestFactory.create(AppModule);
   
@@ -19,8 +19,7 @@ async function bootstrap() {
   const metricsService = app.get(MetricsService);
   const monitoringLogger = app.get(MonitoringLogger);
 
-  // Add Sentry request handler middleware
-  app.use(getSentryRequestHandler());
+  // Sentry request handler is managed by @sentry/nestjs setup
 
   // Add metrics interceptor globally
   app.useGlobalInterceptors(new MetricsInterceptor(metricsService, monitoringLogger));
@@ -45,8 +44,7 @@ async function bootstrap() {
     }),
   );
 
-  // Add Sentry error handler middleware
-  app.use(getSentryErrorHandler());
+  // Sentry error handler is managed by @sentry/nestjs setup
 
   monitoringLogger.log('Application starting', { port: 3000 });
   await app.listen(3000);

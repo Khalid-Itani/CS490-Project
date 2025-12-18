@@ -9,4 +9,10 @@ export class AppController {
   healthCheck() {
     return { status: 'API running' };
   }
+
+  // Sentry verification endpoint
+  @Get('/debug-sentry')
+  getError() {
+    throw new Error('My first Sentry error!');
+  }
 }
