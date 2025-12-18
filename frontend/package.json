@@ -17,6 +17,8 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@heroicons/react": "^2.2.0",
+    "@sentry/react": "^8.5.0",
+    "@sentry/tracing": "^8.5.0",
     "@supabase/supabase-js": "^2.81.0",
     "axios": "^1.12.2",
     "browser-image-compression": "^2.0.2",

@@ -40,4 +40,10 @@ export class AppController {
     Sentry.metrics.count('test_counter', 1);
     throw new Error('My first Sentry error!');
   }
+
+  // Sentry verification endpoint
+  @Get('/debug-sentry')
+  getError() {
+    throw new Error('My first Sentry error!');
+  }
 }

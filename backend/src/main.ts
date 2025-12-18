@@ -1,59 +1,29 @@
-// IMPORTANT: Make sure to import `instrument.ts` at the top of your file.
-import './instrument';
-
-// All other imports below
+import "./instrument";
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import session from 'express-session';
-import * as bodyParser from 'body-parser';
-import helmet from 'helmet';
+// Sentry is initialized in instrument.ts; custom init/middleware removed to avoid duplication
+import { MetricsInterceptor } from './monitoring/metrics.interceptor';
+import { MonitoringLogger } from './monitoring/logger.service';
+import { MetricsService } from './monitoring/metrics.service';
 
 console.log('Loaded SUPABASE_URL:', process.env.SUPABASE_URL);
 
 async function bootstrap() {
+  // Sentry already initialized in instrument.ts
+
   const app = await NestFactory.create(AppModule);
   
-  // Enable body parsing
-  app.use(bodyParser.json({ limit: '50mb' }));
-  app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-  
-  // Log all requests
-  app.use((req, res, next) => {
-    if (req.path === '/responses' && req.method === 'POST') {
-      console.log('=== RAW REQUEST DEBUG ===');
-      console.log('Method:', req.method);
-      console.log('Path:', req.path);
-      console.log('Headers:', req.headers);
-      console.log('Body:', req.body);
-      console.log('========================');
-    }
-    next();
-  });
-  
-  // UC-135: Security Headers
-  app.use(helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        imgSrc: ["'self'", 'data:', 'https:'],
-        connectSrc: ["'self'", 'http://localhost:3000', 'http://localhost:5173', 'https://cs-490-project.vercel.app', 'https://cs-490-project-l12tt6cfg-khalid-itanis-projects.vercel.app'],
-      },
-    },
-    hsts: {
-      maxAge: 31536000,
-      includeSubDomains: true,
-      preload: true,
-    },
-    frameguard: { action: 'deny' },
-    noSniff: true,
-    xssFilter: true,
-  }));
-  
-  // CORS Configuration - Allow all Vercel preview/prod domains dynamically
+  // Get monitoring services
+  const metricsService = app.get(MetricsService);
+  const monitoringLogger = app.get(MonitoringLogger);
+
+  // Sentry request handler is managed by @sentry/nestjs setup
+
+  // Add metrics interceptor globally
+  app.useGlobalInterceptors(new MetricsInterceptor(metricsService, monitoringLogger));
+
   app.enableCors({
     origin: (origin, callback) => {
       // Allow server-to-server or curl (no origin)
@@ -100,15 +70,15 @@ async function bootstrap() {
       },
     }),
   );
-  
-  // UC-135: CSRF Protection disabled globally to avoid breaking existing auth
-  // CSRF protection is demonstrated via /security/test-csrf endpoint
-  // In production, apply CSRF selectively to state-changing operations
-  
-  // Railway deployment: Use PORT environment variable or default to 3000
-  const port = process.env.PORT || 3000;
-  await app.listen(port);
-  console.log(`🚀 Application is running on port ${port}`);
+
+  // Sentry error handler is managed by @sentry/nestjs setup
+
+  monitoringLogger.log('Application starting', { port: 3000 });
+  await app.listen(3000);
+  monitoringLogger.log('Application started successfully', { port: 3000 });
 }
 
-bootstrap();
+bootstrap().catch(error => {
+  console.error('Failed to start application:', error);
+  process.exit(1);
+});

@@ -1,4 +1,5 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { SentryModule } from '@sentry/nestjs/setup';
 import { ConfigModule } from '@nestjs/config';
 import { SentryModule } from '@sentry/nestjs/setup';
 import { AppController } from './app.controller';
@@ -45,13 +46,7 @@ import { ExternalCertificationsModule } from './external-certifications/external
 import { EmailIntegrationModule } from './email-integration/email-integration.module';
 
 import { TimingOptimizerModule } from './timing-optimizer/timing-optimizer.module';
-import { ResponsesModule } from './responses/responses.module';
-import { OffersModule } from './offers/offers.module';
-import { PlatformsModule } from './platforms/platforms.module';
-import { DuplicatesModule } from './duplicates/duplicates.module';
-import { SimulationModule } from './simulation/simulation.module';
-import { SecurityModule } from './security/security.module';
-import { ApiMonitoringModule } from './api-monitoring/api-monitoring.module';
+import { MonitoringModule } from './monitoring/monitoring.module';
 
 @Module({
   imports: [
@@ -60,6 +55,8 @@ import { ApiMonitoringModule } from './api-monitoring/api-monitoring.module';
       isGlobal: true,
       envFilePath: ['.env'], // ensures backend/.env is loaded
     }),
+    SentryModule.forRoot(),
+    MonitoringModule,
     SupabaseModule,
     AuthModule,
     ApplicationsModule,
